@@ -5,16 +5,16 @@ class TimeSlotEditor extends React.Component {
         return (
             <div className = "tsEditor">
                 <div className = "row">
-                    <div className="col-sm-6" >
+                    <div className="col-sm-6 name">
                         <input id = "0" type = "text" onChange = {this.handleChange} value = {this.props.name} placeholder="Name"/>
                     </div>
-                    <div className="col-sm-6 ">
+                    <div className="col-sm-6 link">
                         <input id = "3" type="text" onChange = {this.handleChange} value = {this.props.info} placeholder="Class Location or Link with http(s)://"/>
                     </div>
                 </div>
 
                 <div className = "row">
-                    <div className = "col-sm-6 ">
+                    <div className = "col-sm-6 times">
                             <input id = "1" type = "time" onChange = {this.handleChange} required value = {this.props.startTime} />
                         
                             <input id = "2" type = "time" onChange = {this.handleChange} value = {this.props.endTime}/>
@@ -52,7 +52,7 @@ class TimeSlotEditor extends React.Component {
                             </div>
                         </div>
                 </div>
-                <button className = "btn btn-danger btn-sm" onClick = {this.handleDelete}>Delete From Schedule</button>
+                <button className = "btn btn-danger btn-sm delete" onClick = {this.handleDelete}>Delete From Schedule</button>
             </div>
         );
     }

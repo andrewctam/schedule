@@ -20,6 +20,15 @@
 </html>
 
 <style>
+h1, p {
+  margin-top: 1vh;
+  text-align: center;
+}
+
+.editors {
+  overflow-y: scroll;
+  max-height: 50vh;
+}
 
 .Editor {
   width: 80%;
@@ -27,17 +36,11 @@
   margin-right: auto;
   margin-top: 1vh;
   margin-bottom: 1vh;
-
 }
 @media (max-width: 576px) {
   .Editor {
     width: 100%;
   }
-}
-
-h1, p {
-  margin-top: 1vh;
-  text-align: center;
 }
 
 .editorInfo {
@@ -46,6 +49,18 @@ h1, p {
   padding-bottom: 1vh;
   padding-left: 12.5%;
   padding-right: 12.5%;
+}
+
+.Editor > div > div {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.editSchedule {
+  border-left: 1px solid black;
+  border-right: none;
+  border-bottom: none;
+  border-right: none;
 }
 
 .btn {
@@ -58,12 +73,6 @@ h1, p {
   outline: none;
   box-shadow: none;
 }
-
-.Editor > div > div {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .btn-danger {
   background-color: rgb(237, 214, 214);
   color: black;
@@ -73,21 +82,30 @@ h1, p {
   margin-top: 3vh;
   background-color: rgba(75, 121, 238, 0.817);
 }
-
+.btn-info {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0);
+  border-left: 1px dashed black;
+  color: black;
+}
 .classOver {
   background-color: rgba(255, 255, 255);
   color: rgba(200, 200, 200);
   font-size: 12px;
+  border: 1px solid black;
 }
 .classInProgress {
   background-color: lightgreen;
+  border: 1px solid black;
 }
 .classSoon {
   background-color: lightblue;
+  border: 1px solid black;
 }
-
 .classInFuture {
   background-color: rgb(200, 200, 200);
+  border: 1px solid black;
 }
 
 .tsEditor {
@@ -101,21 +119,36 @@ h1, p {
   margin-left: 0px;
 }
 
-.btn-info {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0);
-  border: none;
-  color: black;
+.col-sm-6 {
+  padding: 0 0 0 0;
 }
 
 .TimeText {
   text-align: center;
 }
 
-.col-sm-6 {
-  padding: 0 0 0 0;
-  border: 1px solid black;
+.name {
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.link {
+  border-bottom: 1px solid black;
+}
+
+.times {
+  border-right: 1px solid black;
+}
+
+.delete {
+  border-top: 1px solid black;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+}
+
+.checks {
+  text-align: center;
 }
 
 input {
@@ -134,15 +167,5 @@ input[type=time] {
   text-align: center;
   -webkit-appearance: none;
   -moz-appearance: none;
-}
-
-.checks {
-  text-align: center;
-}
-
-
-.editors {
-  overflow-y: scroll;
-  max-height: 50vh;
 }
 </style>

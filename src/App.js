@@ -65,7 +65,7 @@ class App extends React.Component {
             msg = {msg}/> 
             <Schedule schedule={this.state.schedule}/> 
         </div>
-        //schedule is {[name, startTime, endTime, sun ... sat], ...}
+        //schedule is {[name, startTime, endTime, link, sun ... sat], ...}
         );
     } 
     
@@ -76,10 +76,9 @@ class App extends React.Component {
         this.setState({schedule: temp});
         this.saveSchedule();
     }
-
     addTimeSlot = () => {
         var temp = this.state.schedule;
-        temp.push(["","","","", false, false, false, false, false, false, false]);
+        temp.push(["","11:30","13:30","", false, false, false, false, false, false, false]);
         this.setState({schedule: temp});
         this.saveSchedule();
     }
@@ -107,7 +106,7 @@ class App extends React.Component {
             if (strOutput !== "") {
                 urlParams = compressToBase64(strOutput);
             } else
-            urlParams = "";
+                urlParams = "";
                 
             const url = new URL(window.location);
             url.search = urlParams;

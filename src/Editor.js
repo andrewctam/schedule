@@ -44,7 +44,7 @@ class Editor extends React.Component {
                 <div className = "col-sm-6">
                     <Clock/>
                 </div>
-                <div className = "col-sm-6">
+                <div className = "col-sm-6 editSchedule">
                     <button type = "button" className = "btn btn-secondary" 
                     onClick = {() => this.setState({editorActive: !this.state.editorActive})}>
                         {this.state.editorActive ? "Close Editor" : "Edit Schedule"}  
