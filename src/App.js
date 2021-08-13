@@ -47,22 +47,14 @@ class App extends React.Component {
 
     }
     render() {
-        var msg;
-        if (window.location.href.length >= 2000)
-            msg = "Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links";
-        else if (this.state.schedule.length > 0)
-            msg = "You can save your schedule by bookmarking this page or copying the link in the address bar";
-        else
-            msg = "Your schedule is currently empty. Click [Add Class] below to add a new class";
-        
+
 
         return (
         <div>
             <Editor schedule={this.state.schedule} 
             updateSchedule={this.updateTimeSlot} 
             addToSchedule = {this.addTimeSlot}
-            removeFromSchedule = {this.removeTimeSlot}
-            msg = {msg}/> 
+            removeFromSchedule = {this.removeTimeSlot}/> 
             <Schedule schedule={this.state.schedule}/> 
         </div>
         //schedule is {[name, startTime, endTime, link, sun ... sat], ...}

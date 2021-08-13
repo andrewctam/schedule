@@ -29,10 +29,17 @@ class Editor extends React.Component {
                 sat = {timeSlot[10]}
             />);
 
+        var msg;
+        if (window.location.href.length >= 2000)
+            msg = <p className = "editorInfo">{"Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
+        else if (this.props.schedule.length > 0)
+            msg = <p className = "editorInfo">{"You can save your schedule by bookmarking this page or copying "} <a href = {window.location.href}>{"this link"}</a>{" (same as link in address bar)"}</p>;
+        else
+            msg = <p className = "editorInfo">{"Your schedule is currently empty. Click [Add Class] below to add a new class"}</p>;
 
         var editor = (
         <div>
-            <p className = "editorInfo"> {this.props.msg} </p>
+            {msg}
             <div className = "editors">{timeSlotEditors}</div>
             <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
             <hr/>
