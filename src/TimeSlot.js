@@ -22,8 +22,11 @@ class TimeSlot extends React.Component {
         }
         var meridian = hrs < 12 ? "AM" : "PM";
         
-        if (hrs > 12)
+        if (hrs > 12) {
             hrs %= 12;
+        } else if (hrs === 0) {
+            hrs = 12;
+        }
 
         return hrs + ":" + mins + " " + meridian;
     }
