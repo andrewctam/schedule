@@ -3,8 +3,8 @@ import React from 'react';
 class TimeSlot extends React.Component {
     render() {
         return (
-            <div className = {this.props.when}> 
-                <button onClick={this.handleClick} className = "btn btn-info">
+            <div> 
+                <button onClick={this.handleClick} className = {"btn btn-info " + this.props.when}>
                     <h1 className = "text-center text-truncate">{this.props.name}</h1> 
                     <h6 className = "text-center text-truncate">{this.to24H(this.props.startTime)} to {this.to24H(this.props.endTime)}</h6> 
                     <p className = "text-center text-nowrap">{this.props.info}</p>

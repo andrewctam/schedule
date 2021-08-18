@@ -22,7 +22,7 @@ class Schedule extends React.Component {
 
             scheduleToRender = (scheduleToday.map((x, index) => 
                 <TimeSlot
-                key = {index}
+                key = {"ts" + index}
                 name = {x[0]}       info = {x[3]}
                 startTime = {x[1]}  endTime = {x[2]}
                 when = {classes[index]}

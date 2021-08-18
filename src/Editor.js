@@ -12,7 +12,7 @@ class Editor extends React.Component {
     render() {
         var timeSlotEditors = this.props.schedule.map((timeSlot, index) => 
             <TimeSlotEditor
-                key = {index}
+                key = {"tse" + index}
                 id = {index}
                 updateSchedule={this.props.updateSchedule}
                 removeFromSchedule={this.props.removeFromSchedule}
@@ -79,8 +79,11 @@ class Clock extends React.Component {
 
     var meridian = hrs < 12 ? "AM" : "PM";
 
-    if (hrs > 12)
+    if (hrs > 12) {
         hrs %= 12;
+    } else if (hrs === 0) {
+        hrs = 12;
+    }
 
     return (<button type = "button" className = "btn btn-secondary">
             {date + " - " + hrs + ":" + mins + " " + meridian}</button>);   
