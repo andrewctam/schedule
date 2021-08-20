@@ -7,7 +7,7 @@ class TimeSlot extends React.Component {
                 <button onClick={this.handleClick} className = {"btn btn-info " + this.props.when}>
                     <h1 className = "text-center text-truncate">{this.props.name}</h1> 
                     <h6 className = "text-center text-truncate">{this.to24H(this.props.startTime)} to {this.to24H(this.props.endTime)}</h6> 
-                    <p className = "text-center text-nowrap">{this.props.info}</p>
+                    <p className = "text-center text-truncate">{this.props.info}</p>
                     
                 </button>
             </div>
