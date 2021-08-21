@@ -39,10 +39,19 @@ class Editor extends React.Component {
 
         var editor = (
         <div>
+            <div className="form-check form-switch">
+                <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
+                <label className="form-check-label" htmlFor="weeklyToggle">Weekly View</label>
+
+                
+            </div>
+
+
             {msg}
             <div className = "editors">{timeSlotEditors}</div>
             <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
             <hr/>
+            
         </div>)
    
             
@@ -57,6 +66,9 @@ class Editor extends React.Component {
                         {this.state.editorActive ? "Close Editor" : "Edit Schedule"}  
                     </button>
                 </div>
+
+                
+
              </div>
 
             {this.state.editorActive ? editor : <hr/>} 
@@ -65,6 +77,10 @@ class Editor extends React.Component {
   
     handleAdd = (e) => {
         this.props.addToSchedule();
+    }
+
+    handleChecked = (e) => {
+        this.props.toggleWeekly();
     }
 }
 
