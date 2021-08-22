@@ -6,29 +6,29 @@ class TimeSlotEditor extends React.Component {
             <div className="tsEditor">
                 <div className="row">
                     <div className="col-sm-6 name">
-                        <input id = "0" type = "text" onChange = {this.handleChange} value = {this.props.name} placeholder="Name"/>
+                        <input id = {this.props.id + ":0"} type = "text" onChange = {this.handleChange} value = {this.props.name} placeholder="Name"/>
                     </div>
 
                     <div className="col-sm-6 link">
-                        <input id = "3" type="text" onChange = {this.handleChange} value = {this.props.info} placeholder="Class Location or Link with http(s)://"/>
+                        <input id = {this.props.id + ":3"} type="text" onChange = {this.handleChange} value = {this.props.info} placeholder="Class Location or Link with http(s)://"/>
                     </div>
                 </div>
 
 
                 <div className="row">
                     <div className="col-sm-6 times">
-                        <input id = "1" type = "time" onChange = {this.handleChange} required value = {this.props.startTime} />
-                        <input id = "2" type = "time" onChange = {this.handleChange} value = {this.props.endTime}/>
+                        <input id = {this.props.id + ":1"} type = "time" onChange = {this.handleChange} required value = {this.props.startTime} />
+                        <input id = {this.props.id + ":2"} type = "time" onChange = {this.handleChange} value = {this.props.endTime}/>
                     </div>
 
                     <div className="col-sm-6 checks">
-                        <DateCheckBox i = "4" dateBool = {this.props.sun} date = "Sun" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox i = "5" dateBool = {this.props.mon} date = "Mon" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox i = "6" dateBool = {this.props.tue} date = "Tue" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox i = "7" dateBool = {this.props.wed} date = "Wed" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox i = "8" dateBool = {this.props.thu} date = "Thu" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox i = "9" dateBool = {this.props.fri} date = "Fri" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox i ="10" dateBool = {this.props.sat} date = "Sat" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id +  ":4"} dateBool = {this.props.sun} date = "Sun" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id +  ":5"} dateBool = {this.props.mon} date = "Mon" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id +  ":6"} dateBool = {this.props.tue} date = "Tue" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id +  ":7"} dateBool = {this.props.wed} date = "Wed" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id +  ":8"} dateBool = {this.props.thu} date = "Thu" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id +  ":9"} dateBool = {this.props.fri} date = "Fri" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id + ":10"} dateBool = {this.props.sat} date = "Sat" handleChecked = {this.handleChecked}/>
                     </div>
                 </div>
                 <button className = "btn btn-danger btn-sm delete" onClick = {this.handleDelete}>Delete From Schedule</button>
@@ -39,12 +39,12 @@ class TimeSlotEditor extends React.Component {
     handleChange = (e) => {
         const element = e.target;
         if (!(element.value.includes(">") || element.value.includes("<")))
-            this.props.updateSchedule(this.props.id, parseInt(element.id), element.value);
+            this.props.updateSchedule(this.props.id, parseInt(element.id.substring(element.id.indexOf(":") + 1)), element.value);
     }
 
     handleChecked = (e) => {
         const element = e.target;
-        this.props.updateSchedule(this.props.id, parseInt(element.id), element.checked);
+        this.props.updateSchedule(this.props.id, parseInt(element.id.substring(element.id.indexOf(":") + 1)), element.checked);
     } 
     
     handleDelete = (e) => {
@@ -57,7 +57,7 @@ class TimeSlotEditor extends React.Component {
 class DateCheckBox extends React.Component {
     render() {
         return <div className="form-check form-check-inline">
-        <input id = {this.props.i} className = "form-check-input" type = "checkbox" onChange={this.props.handleChecked} checked = {this.props.dateBool}/>
+        <input id = {this.props.htmlID} className = "form-check-input" type = "checkbox" onChange={this.props.handleChecked} checked = {this.props.dateBool}/>
         <label htmlFor = {this.props.i} className = "form-check-label">{this.props.date}</label>
         </div>
     }

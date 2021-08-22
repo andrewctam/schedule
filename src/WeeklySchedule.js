@@ -3,13 +3,9 @@ import React from 'react';
 class WeeklySchedule extends React.Component {
     render() {
         //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
-
         var startHr = 24;
         var endHr = 0;
         var hours = [];
-
-
-
         for (var j = 0; j < this.props.schedule.length; j++) {      
             for (var k = 0; k < 7; k++)
                 if (this.props.schedule[j][k + 4]) {
@@ -26,7 +22,6 @@ class WeeklySchedule extends React.Component {
         }
         
         var blocks = [];
-
         for (var j = 0; j < this.props.schedule.length; j++) {      
             for (var k = 0; k < 7; k++)
                 if (this.props.schedule[j][k + 4]) {
@@ -39,11 +34,12 @@ class WeeklySchedule extends React.Component {
                         height: lengthInMins + "px",
                         top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px",
                         left: 12.5 * (k + 1) + "%",
-                    }}><p className = "text-center text-truncate text-wrap">{this.props.schedule[j][0]}</p>
+                    }}><p className = "text-center text-truncate text-wrap">{this.props.schedule[j][0]} <br/> {this.props.schedule[j][3]}</p>
                     </div>
                     blocks.push(block);
                 }
         }
+
 
         for (var i = startHr; i <= endHr; i++) {
             hours.push(<Hour time = {i} />)
@@ -55,13 +51,13 @@ class WeeklySchedule extends React.Component {
                 <thead>
                     <tr>
                         <th scope="col">Time</th>
-                        <th scope="col">Sun</th>
-                        <th scope="col">Mon</th>
-                        <th scope="col">Tue</th>
-                        <th scope="col">Wed</th>
-                        <th scope="col">Thu</th>
-                        <th scope="col">Fri</th>
-                        <th scope="col">Sat</th>
+                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 0 ? "lightgreen" : "white"}}>Sun</th>
+                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 1 ? "lightgreen" : "white"}}>Mon</th>
+                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 2 ? "lightgreen" : "white"}}>Tue</th>
+                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 3 ? "lightgreen" : "white"}}>Wed</th>
+                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 4 ? "lightgreen" : "white"}}>Thu</th>
+                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 5 ? "lightgreen" : "white"}}>Fri</th>
+                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 6 ? "lightgreen" : "white"}}>Sat</th>
                     </tr>
                     </thead>
                             {hours}
@@ -86,16 +82,17 @@ class WeeklySchedule extends React.Component {
     }
 
     handleClick = (e) => {
-        console.log(e.target)
         var link = this.props.schedule[parseInt(e.target.id)][3];
 
         if (link.includes(".") && (link.includes("http://") || link.includes("https://"))) {
+            if (window.confirm("Open the link? " + link))
+
             try {
                 window.open(new URL(link), '_blank').focus();
             } catch (_) {
                 alert(link);
             }
-        }
+        } else alert(link)
     }
     
 }
@@ -121,14 +118,14 @@ class Hour extends React.Component {
         return (
                 <tr>
                     <th scope="row" style = {{verticalAlign: "top"}}>{hrs + " " + meridian }</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td style = {{backgroundColor: new Date().getDay() == 0 ? "lightgreen" : "white"}} />
+                    <td style = {{backgroundColor: new Date().getDay() == 1 ? "lightgreen" : "white"}} />
+                    <td style = {{backgroundColor: new Date().getDay() == 2 ? "lightgreen" : "white"}} />
+                    <td style = {{backgroundColor: new Date().getDay() == 3 ? "lightgreen" : "white"}} />
+                    <td style = {{backgroundColor: new Date().getDay() == 4 ? "lightgreen" : "white"}} />
+                    <td style = {{backgroundColor: new Date().getDay() == 5 ? "lightgreen" : "white"}} />
+                    <td style = {{backgroundColor: new Date().getDay() == 6 ? "lightgreen" : "white"}} />
+                    
                 </tr>
 
         )
@@ -144,7 +141,6 @@ class CurrentTime extends React.Component {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
                     }} />
         else 
-            console.log("a");
             return null;
     }
     

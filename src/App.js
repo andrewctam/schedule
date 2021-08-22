@@ -92,7 +92,6 @@ class App extends React.Component {
     }
 
     saveSchedule = () => {
-        console.log(this.state.weekly)
         if (this.state.weekly)
             var strOutput = "1>";
         else 
@@ -116,10 +115,10 @@ class App extends React.Component {
             } else
                 urlParams = "";
                 
-                console.log(strOutput)
             const url = new URL(window.location);
             url.search = urlParams;
             window.history.pushState({}, '', url);
+
     }
 
     
