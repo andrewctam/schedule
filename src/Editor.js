@@ -1,4 +1,5 @@
 import React from 'react';
+import { traverseTwoPhase } from 'react-dom/test-utils';
 import TimeSlotEditor from './TimeSlotEditor.js'
 
 class Editor extends React.Component {
@@ -9,6 +10,51 @@ class Editor extends React.Component {
         }
     }
 
+    stringToDate = (str) => {
+        var hrs = str.substring(0, 2);
+        var mins = str.substring(3, 5);
+        var time = new Date();
+        time.setHours(parseInt(hrs));
+        time.setMinutes(parseInt(mins));
+        time.setSeconds(0);
+        return time;
+    }
+    
+
+    toggleAndVerify = () => {
+        if (this.state.editorActive)
+            for (var i = 0; i < this.props.schedule.length; i++) {
+                if (this.stringToDate(this.props.schedule[i][2]) < this.stringToDate(this.props.schedule[i][1])) {
+                    if (this.props.schedule[i][0] == "") 
+                        switch (i + 1) {
+                            case 1:
+                                var identifier = "the " + (i + 1) + "st class";
+                                break;
+                            case 2:
+                                identifier = "the " + (i + 1) + "nd class";
+                                break;
+                            case 3:
+                                identifier = "the " + (i + 1) + "rd class";
+                                break;
+                            default:
+                                identifier = "the " + (i + 1) + "th class";
+                                break;
+                        }
+                    else
+                        identifier = this.props.schedule[i][0];
+
+                    if (window.confirm("The end time of " + identifier + " is before the start time. Would you like to close the editor anyway?"))  {
+                        this.setState({editorActive: false});
+                        return null;
+                    }
+                } 
+                
+                
+            }
+
+        this.setState({editorActive: !this.state.editorActive})
+
+    }
     render() {
         var timeSlotEditors = this.props.schedule.map((timeSlot, index) => 
             <TimeSlotEditor
@@ -62,7 +108,7 @@ class Editor extends React.Component {
                 </div>
                 <div className = "col-sm-6 editSchedule">
                     <button type = "button" className = "btn btn-secondary" 
-                    onClick = {() => this.setState({editorActive: !this.state.editorActive})}>
+                    onClick = {this.toggleAndVerify}>
                         {this.state.editorActive ? "Close Editor" : "Edit Schedule"}  
                     </button>
                 </div>

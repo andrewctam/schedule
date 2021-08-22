@@ -7,37 +7,39 @@ class WeeklySchedule extends React.Component {
         var startHr = 24;
         var endHr = 0;
         var hours = [];
-        for (var j = 0; j < this.props.schedule.length; j++) {      
-            for (var k = 0; k < 7; k++)
-                if (this.props.schedule[j][k + 4]) {
-                var start = this.stringToDate(this.props.schedule[j][1]);
-                var end = this.stringToDate(this.props.schedule[j][2]);
-                
-                if (start.getHours() < startHr) {
-                    startHr = start.getHours();
-                }
-                if (end.getHours() > endHr) {
-                    endHr = end.getHours();
-                }
+        for (var i = 0; i < this.props.schedule.length; i++) {      
+            var start = this.stringToDate(this.props.schedule[i][1]);
+            var end = this.stringToDate(this.props.schedule[i][2]);
+            
+            for (var j = 0; j < 7; j++)
+                if (this.props.schedule[i][j + 4]) {
+                    
+                    if (start.getHours() < startHr) {
+                        startHr = start.getHours();
+                    }
+                    if (end.getHours() > endHr) {
+                        endHr = end.getHours();
+                    }
             }
         }
         
         //create blocks for each class
         var blocks = [];
-        for (var j = 0; j < this.props.schedule.length; j++) {      
-            var start = this.stringToDate(this.props.schedule[j][1]);
-            var end = this.stringToDate(this.props.schedule[j][2]);
+        for (var i = 0; i < this.props.schedule.length; i++) {      
+            var start = this.stringToDate(this.props.schedule[i][1]);
+            var end = this.stringToDate(this.props.schedule[i][2]);
             var lengthInMins = (end.getHours() - start.getHours()) * 60 + end.getMinutes() - start.getMinutes();
             
-            for (var k = 0; k < 7; k++)
-                if (this.props.schedule[j][k + 4]) {
+            for (var j = 0; j < 7; j++)
+                if (this.props.schedule[i][j + 4]) {
                     
-                    var block = <div id={j} className = "block" onClick = {this.handleClick} style = {
+                    var block = <div id={i} className = "block" onClick = {this.handleClick} style = {
                     {
                         height: lengthInMins + "px",
                         top: 3 + start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px", //+3 for borders
-                        left: 12.5 * (k + 1) + "%",
-                    }}><p className = "text-center text-truncate text-wrap">{this.props.schedule[j][0]} <br/> {this.props.schedule[j][3]}</p>
+                        left: 12.5 * (j + 1) + "%",
+                    }}><p className = "text-center text-truncate text-wrap">{this.props.schedule[i][0]}</p>
+                    <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][3]}</p>
                     </div>
                     blocks.push(block);
                 }
@@ -53,7 +55,7 @@ class WeeklySchedule extends React.Component {
                 <table className = "table">
                 <thead>
                     <tr>
-                        <th scope="col">Time</th>
+                        <th scope="col"><p>Time</p></th>
                         <th scope="col"><p style = {{color: new Date().getDay() === 0 ? "red" : "black"}} >Sun</p></th>
                         <th scope="col"><p style = {{color: new Date().getDay() === 1 ? "red" : "black"}} >Mon</p></th>
                         <th scope="col"><p style = {{color: new Date().getDay() === 2 ? "red" : "black"}} >Tue</p></th>
@@ -141,7 +143,7 @@ class CurrentTime extends React.Component {
         if (now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr))
             return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
                     {
-                        top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
+                        top: 3 + now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
                     }} />
         else 
             return null;
