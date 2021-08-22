@@ -3,6 +3,7 @@ import React from 'react';
 class WeeklySchedule extends React.Component {
     render() {
         //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
+        //determine what is the earliest class and what is the latest class
         var startHr = 24;
         var endHr = 0;
         var hours = [];
@@ -21,18 +22,20 @@ class WeeklySchedule extends React.Component {
             }
         }
         
+        //create blocks for each class
         var blocks = [];
         for (var j = 0; j < this.props.schedule.length; j++) {      
+            var start = this.stringToDate(this.props.schedule[j][1]);
+            var end = this.stringToDate(this.props.schedule[j][2]);
+            var lengthInMins = (end.getHours() - start.getHours()) * 60 + end.getMinutes() - start.getMinutes();
+            
             for (var k = 0; k < 7; k++)
                 if (this.props.schedule[j][k + 4]) {
-                    var start = this.stringToDate(this.props.schedule[j][1]);
-                    var end = this.stringToDate(this.props.schedule[j][2]);
-                    var lengthInMins = (end.getHours() - start.getHours()) * 60 + end.getMinutes() - start.getMinutes();
                     
                     var block = <div id={j} className = "block" onClick = {this.handleClick} style = {
                     {
                         height: lengthInMins + "px",
-                        top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px",
+                        top: 3 + start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px", //+3 for borders
                         left: 12.5 * (k + 1) + "%",
                     }}><p className = "text-center text-truncate text-wrap">{this.props.schedule[j][0]} <br/> {this.props.schedule[j][3]}</p>
                     </div>
@@ -40,7 +43,7 @@ class WeeklySchedule extends React.Component {
                 }
         }
 
-
+        //create the hours 
         for (var i = startHr; i <= endHr; i++) {
             hours.push(<Hour time = {i} />)
         }
@@ -51,13 +54,13 @@ class WeeklySchedule extends React.Component {
                 <thead>
                     <tr>
                         <th scope="col">Time</th>
-                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 0 ? "lightgreen" : "white"}}>Sun</th>
-                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 1 ? "lightgreen" : "white"}}>Mon</th>
-                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 2 ? "lightgreen" : "white"}}>Tue</th>
-                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 3 ? "lightgreen" : "white"}}>Wed</th>
-                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 4 ? "lightgreen" : "white"}}>Thu</th>
-                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 5 ? "lightgreen" : "white"}}>Fri</th>
-                        <th scope="col" style = {{backgroundColor: new Date().getDay() === 6 ? "lightgreen" : "white"}}>Sat</th>
+                        <th scope="col"><p style = {{color: new Date().getDay() === 0 ? "red" : "black"}} >Sun</p></th>
+                        <th scope="col"><p style = {{color: new Date().getDay() === 1 ? "red" : "black"}} >Mon</p></th>
+                        <th scope="col"><p style = {{color: new Date().getDay() === 2 ? "red" : "black"}} >Tue</p></th>
+                        <th scope="col"><p style = {{color: new Date().getDay() === 3 ? "red" : "black"}} >Wed</p></th>
+                        <th scope="col"><p style = {{color: new Date().getDay() === 4 ? "red" : "black"}} >Thu</p></th>
+                        <th scope="col"><p style = {{color: new Date().getDay() === 5 ? "red" : "black"}} >Fri</p></th>
+                        <th scope="col"><p style = {{color: new Date().getDay() === 6 ? "red" : "black"}} >Sat</p></th>
                     </tr>
                     </thead>
                             {hours}
@@ -118,13 +121,13 @@ class Hour extends React.Component {
         return (
                 <tr>
                     <th scope="row" style = {{verticalAlign: "top"}}>{hrs + " " + meridian }</th>
-                    <td style = {{backgroundColor: new Date().getDay() == 0 ? "lightgreen" : "white"}} />
-                    <td style = {{backgroundColor: new Date().getDay() == 1 ? "lightgreen" : "white"}} />
-                    <td style = {{backgroundColor: new Date().getDay() == 2 ? "lightgreen" : "white"}} />
-                    <td style = {{backgroundColor: new Date().getDay() == 3 ? "lightgreen" : "white"}} />
-                    <td style = {{backgroundColor: new Date().getDay() == 4 ? "lightgreen" : "white"}} />
-                    <td style = {{backgroundColor: new Date().getDay() == 5 ? "lightgreen" : "white"}} />
-                    <td style = {{backgroundColor: new Date().getDay() == 6 ? "lightgreen" : "white"}} />
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
                     
                 </tr>
 

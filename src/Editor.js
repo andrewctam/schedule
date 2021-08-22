@@ -43,7 +43,7 @@ class Editor extends React.Component {
                 <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
                 <label className="form-check-label" htmlFor="weeklyToggle">Weekly View</label>
 
-                
+
             </div>
 
 
