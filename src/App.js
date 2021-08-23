@@ -62,8 +62,7 @@ class App extends React.Component {
             /> 
             
             {this.state.weekly ? <WeeklySchedule schedule = {this.state.schedule}/> : 
-            <Schedule schedule={this.state.schedule}/> 
-}
+            <Schedule schedule={this.state.schedule}/>}
         </div>
         //schedule is {[name, startTime, endTime, link, sun ... sat], ...}
         );
@@ -86,9 +85,12 @@ class App extends React.Component {
         this.setState({schedule: temp, weekly: this.state.weekly}, () => {this.saveSchedule()});
     }
     toggleWeekly = (e) => {
+        if (!this.state.weekly)
+            if (!window.confirm("The weekly schedule is best viewed on wide screens. In addition, class names and meeting info may be truncated due to space constraints. Enable the weekly calendar?")) {
+               return null;
+            }
         var temp = !this.state.weekly;
         this.setState({schedule: this.state.schedule, weekly: temp}, () => {this.saveSchedule()});
-
     }
 
     saveSchedule = () => {

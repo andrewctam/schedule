@@ -36,7 +36,7 @@ class WeeklySchedule extends React.Component {
                     var block = <div id={i} className = "block" onClick = {this.handleClick} style = {
                     {
                         height: lengthInMins + "px",
-                        top: 3 + start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px", //+3 for borders
+                        top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px", //+3 for borders
                         left: 12.5 * (j + 1) + "%",
                     }}><p className = "text-center text-truncate text-wrap">{this.props.schedule[i][0]}</p>
                     <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][3]}</p>
@@ -122,7 +122,7 @@ class Hour extends React.Component {
 
         return (
                 <tr>
-                    <th scope="row" style = {{verticalAlign: "top"}}>{hrs + " " + meridian }</th>
+                    <th scope="row" style = {{verticalAlign: "top"}}><p>{hrs + " " + meridian }</p></th>
                     <td/>
                     <td/>
                     <td/>
@@ -143,7 +143,7 @@ class CurrentTime extends React.Component {
         if (now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr))
             return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
                     {
-                        top: 3 + now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
+                        top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
                     }} />
         else 
             return null;
