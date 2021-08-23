@@ -86,16 +86,15 @@ class Editor extends React.Component {
 
         var editor = (
         <div>
+            {msg}
             <div className="form-check form-switch">
                 <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
-                <label className="form-check-label" htmlFor="weeklyToggle">Weekly View</label>
-
-
+                <label className="form-check-label" htmlFor="weeklyToggle">View Weekly Schedule</label>
+    
             </div>
 
-
-            {msg}
-            <div className = "editors">{timeSlotEditors}</div>
+        
+            <div className = "editors"><hr />{timeSlotEditors}</div>
             <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
             <hr/>
             

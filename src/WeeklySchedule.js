@@ -12,19 +12,15 @@ class WeeklySchedule extends React.Component {
         var startHr = 24;
         var endHr = 0;
         var hours = [];
+
         for (var i = 0; i < this.props.schedule.length; i++) {      
-            var start =     this.stringToDate(this.props.schedule[i][1]);
+            var start = this.stringToDate(this.props.schedule[i][1]);
             var end = this.stringToDate(this.props.schedule[i][2]);
-            
-            for (var j = 0; j < 7; j++)
-                if (this.props.schedule[i][j + 4]) {
-                    
-                    if (start.getHours() < startHr) {
-                        startHr = start.getHours();
-                    }
-                    if (end.getHours() > endHr) {
-                        endHr = end.getHours();
-                    }
+            if (start.getHours() < startHr) {
+                startHr = start.getHours();
+            }
+            if (end.getHours() > endHr) {
+                endHr = end.getHours();
             }
         }
         
@@ -57,6 +53,8 @@ class WeeklySchedule extends React.Component {
         }
 
         
+        if (this.props.schedule.length === 0)
+            return (<h1>Click [Edit Schedule] Above to Add Classes</h1>)
 
         return (<div>
             <div className = "weekly">
