@@ -46,7 +46,8 @@ class Editor extends React.Component {
                     if (window.confirm("The end time of " + identifier + " is before the start time. Would you like to close the editor anyway?"))  {
                         this.setState({editorActive: false});
                         return null;
-                    }
+                    } else
+                        return null;
                 } 
                 
                 

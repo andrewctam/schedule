@@ -1,6 +1,11 @@
 import React from 'react';
+import TimeSlot from './TimeSlot.js';
 
 class WeeklySchedule extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {timeSlot: null} 
+    }
     render() {
         //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
         //determine what is the earliest class and what is the latest class
@@ -8,7 +13,7 @@ class WeeklySchedule extends React.Component {
         var endHr = 0;
         var hours = [];
         for (var i = 0; i < this.props.schedule.length; i++) {      
-            var start = this.stringToDate(this.props.schedule[i][1]);
+            var start =     this.stringToDate(this.props.schedule[i][1]);
             var end = this.stringToDate(this.props.schedule[i][2]);
             
             for (var j = 0; j < 7; j++)
@@ -32,16 +37,17 @@ class WeeklySchedule extends React.Component {
             
             for (var j = 0; j < 7; j++)
                 if (this.props.schedule[i][j + 4]) {
-                    
-                    var block = <div id={i} className = "block" onClick = {this.handleClick} style = {
-                    {
-                        height: lengthInMins + "px",
-                        top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px", //+3 for borders
-                        left: 12.5 * (j + 1) + "%",
-                    }}><p className = "text-center text-truncate text-wrap">{this.props.schedule[i][0]}</p>
-                    <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][3]}</p>
-                    </div>
-                    blocks.push(block);
+                    blocks.push(
+                    <div id={i} className = "block" onClick = {this.handleClick} style = {
+                        {
+                            height: lengthInMins + "px",
+                            top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px",
+                            left: 12.5 * (j + 1) + "%",
+                        }}>
+                            
+                        <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][0]}</p>
+                        <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][3]}</p>
+                    </div>);
                 }
         }
 
@@ -50,26 +56,33 @@ class WeeklySchedule extends React.Component {
             hours.push(<Hour time = {i} />)
         }
 
-        return (
-            <div className = "weekly">
-                <table className = "table">
-                <thead>
-                    <tr>
-                        <th scope="col"><p>Time</p></th>
-                        <th scope="col"><p style = {{color: new Date().getDay() === 0 ? "red" : "black"}} >Sun</p></th>
-                        <th scope="col"><p style = {{color: new Date().getDay() === 1 ? "red" : "black"}} >Mon</p></th>
-                        <th scope="col"><p style = {{color: new Date().getDay() === 2 ? "red" : "black"}} >Tue</p></th>
-                        <th scope="col"><p style = {{color: new Date().getDay() === 3 ? "red" : "black"}} >Wed</p></th>
-                        <th scope="col"><p style = {{color: new Date().getDay() === 4 ? "red" : "black"}} >Thu</p></th>
-                        <th scope="col"><p style = {{color: new Date().getDay() === 5 ? "red" : "black"}} >Fri</p></th>
-                        <th scope="col"><p style = {{color: new Date().getDay() === 6 ? "red" : "black"}} >Sat</p></th>
-                    </tr>
-                    </thead>
-                            {hours}
-                            {blocks}
-                            <CurrentTime startHr = {startHr} endHr = {endHr} />
-                    </table>
+        
 
+        return (<div>
+            <div className = "weekly">
+            {this.state.timeSlot}
+                <table className = "table" >
+                    <thead onClick = {() => this.setState({timeSlot: null})} >
+                        <tr>
+                            <th scope="col"><p>Time</p></th>
+                            <th scope="col"><p>Sun</p></th>
+                            <th scope="col"><p>Mon</p></th>
+                            <th scope="col"><p>Tue</p></th>
+                            <th scope="col"><p>Wed</p></th>
+                            <th scope="col"><p>Thu</p></th>
+                            <th scope="col"><p>Fri</p></th>
+                            <th scope="col"><p>Sat</p></th>
+                        </tr>
+                    </thead>
+
+                    <tbody onClick = {() => this.setState({timeSlot: null})}>
+                        {hours}
+                    </tbody>
+                    
+                    {blocks}
+                    <CurrentTime startHr = {startHr} endHr = {endHr} />
+                </table>
+                </div>
             </div>
         );
     }
@@ -87,17 +100,16 @@ class WeeklySchedule extends React.Component {
     }
 
     handleClick = (e) => {
-        var link = this.props.schedule[parseInt(e.target.id)][3];
 
-        if (link.includes(".") && (link.includes("http://") || link.includes("https://"))) {
-            if (window.confirm("Open the link? " + link))
+        this.setState({timeSlot:
+             <TimeSlot
+             when = {"classInFuture"}
+            name = {this.props.schedule[e.target.id][0]}       info = {this.props.schedule[e.target.id][3]}
+            startTime = {this.props.schedule[e.target.id][1]}  endTime = {this.props.schedule[e.target.id][2]}
+            />
+        })
 
-            try {
-                window.open(new URL(link), '_blank').focus();
-            } catch (_) {
-                alert(link);
-            }
-        } else alert(link)
+
     }
     
 }
@@ -144,6 +156,7 @@ class CurrentTime extends React.Component {
             return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
                     {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
+                        left: 12.5 + (new Date().getDay() * 12.5) + "%",
                     }} />
         else 
             return null;

@@ -85,6 +85,11 @@ h1, h6, p {
   background-color: rgba(255, 255, 255, 0);
   color: black;
 }
+
+.btn-info:hover {
+  background-color: #7dd1f17c;
+  border: 1px solid black;
+}
 .classOver {
   background-color: rgba(255, 255, 255);
   color: rgba(200, 200, 200);
@@ -201,10 +206,21 @@ td {
   border: 1px dotted rgba(128, 128, 128);
 }
 
+
+
+.block, .block > p, th > p, td > p, tr > p {
+  font-size: 1.5vw;
+}
+
+@media (max-width: 576px) {
+  .block, .block > p, th > p, td > p, tr > p {
+    font-size: 2.5vw;
+  }
+}
+
 .block {
   width: 12.49%;
   background-color: #7dd1f17c;
-  font-size: 2.5vh;
   text-align: center;
   position: absolute;
   border: 1px solid black;
@@ -213,7 +229,6 @@ td {
 .block > p {
   width: 100%;
   height: 50%;
-  font-size: 2.5vh;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -224,7 +239,6 @@ td {
 th > p, td > p, tr > p {
   width: 100%;
   height: 100%;
-  font-size: 2.5vh;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: clip;
@@ -234,7 +248,7 @@ th > p, td > p, tr > p {
 
 }
 .line {
-  width: 87.5%;
+  width: 12.5%;
   height: 1px;
   left: 12.5%;
   margin-left: 0;
