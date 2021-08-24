@@ -1,5 +1,4 @@
 import React from 'react';
-import { traverseTwoPhase } from 'react-dom/test-utils';
 import TimeSlotEditor from './TimeSlotEditor.js'
 
 class Editor extends React.Component {

@@ -150,7 +150,7 @@ class Hour extends React.Component {
 class CurrentTime extends React.Component {
     render() {
         var now = new Date();
-        if (now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr))
+        if (now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr + 1))
             return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
                     {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
