@@ -12,10 +12,6 @@ class WeeklySchedule extends React.Component {
         var startHr = 24;
         var endHr = 0;
         var hours = [];
-
-        var now = new Date();
-        var timeToNextClass = -1;
- 
         for (var i = 0; i < this.props.schedule.length; i++) {      
             var start = this.stringToDate(this.props.schedule[i][1]);
             var end = this.stringToDate(this.props.schedule[i][2]);
@@ -25,12 +21,6 @@ class WeeklySchedule extends React.Component {
             if (end.getHours() > endHr) {
                 endHr = end.getHours();
             }
-
-            if (this.props.schedule[i][now.getDay() + 4] && now < start) {
-                timeToNextClass = (start - now) / 60000;
-            }
-
-
         }
         
         //create blocks for each class
@@ -89,7 +79,7 @@ class WeeklySchedule extends React.Component {
                     </tbody>
                     
                     {blocks}
-                    <CurrentTime ttnc = {timeToNextClass} startHr = {startHr} endHr = {endHr} />
+                    <CurrentTime schedule = {this.props.schedule} startHr = {startHr} endHr = {endHr} />
                 </table>
                 </div>
             </div>
@@ -161,12 +151,23 @@ class Hour extends React.Component {
 class CurrentTime extends React.Component {
     render() {
         var now = new Date();
+        var timeToNextClass = -1;
+ 
+        for (var i = 0; i < this.props.schedule.length; i++) {      
+            var start = this.stringToDate(this.props.schedule[i][1]);
+            var end = this.stringToDate(this.props.schedule[i][2]);
+            if (this.props.schedule[i][now.getDay() + 4] && now < start) {
+                timeToNextClass = (start - now) / 60000;
+            }
+
+        }
+
         if (now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr + 1))
             return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
                     {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 - 28 + "px",
                         left: 12.5 + (new Date().getDay() * 12.5) + "%",
-                    }}><p>{(this.props.ttnc !== -1 ? this.formatMinutes(this.props.ttnc) : "")}</p></div>
+                    }}><p>{(timeToNextClass !== -1 ? this.formatMinutes(timeToNextClass) : "")}</p></div>
         else 
             return null;
     }
@@ -181,8 +182,20 @@ class CurrentTime extends React.Component {
         }
     }
 
+    stringToDate = (str) => {
+        if (str!= null) {
+            var hrs = str.substring(0, 2);
+            var mins = str.substring(3, 5);
+            var time = new Date();
+            time.setHours(parseInt(hrs));
+            time.setMinutes(parseInt(mins));
+            time.setSeconds(0);
+            return time;
+        }
+    }
+    
     formatMinutes = (num) => {
-        var mins = Math.ceil(num);
+        var mins = Math.floor(num);
         var hrs = Math.floor(mins / 60);
         var mins = mins % 60;
 
@@ -196,12 +209,20 @@ class CurrentTime extends React.Component {
 
     }
     
-    handleClick() {
+    handleClick = () => {
         document.getElementById("currentTime").style.display = "none";
+        this.hide = setInterval(() => this.show(), 5000);
+    }
+
+
+    show = () => {
+        document.getElementById("currentTime").style.display = "table";
+        clearInterval(this.hide);
+
     }
 
     componentDidMount() {
-        var timeToNextMinute = 60000 - (new Date().getSeconds() * 1000);
+        var timeToNextMinute = 61000 - (new Date().getSeconds() * 1000);
         this.waitUntilMinute = setInterval(() => this.repeatEveryMin(), timeToNextMinute);
     }
 
@@ -214,6 +235,7 @@ class CurrentTime extends React.Component {
     componentWillUnmount() {
         clearInterval(this.interval);
         clearInterval(this.waitUntilMinute);
+        clearInterval(this.hide);
 
     }
 }
