@@ -74,17 +74,17 @@ class App extends React.Component {
     updateTimeSlot = (timeSlot, i, newValue) => {
         var temp = this.state.schedule;
         temp[timeSlot][i] = newValue;
-        this.setState({schedule: temp, weekly: this.state.weekly}, () => {this.saveSchedule()});
+        this.setState({schedule: temp}, () => {this.saveSchedule()});
     }
     addTimeSlot = () => {
         var temp = this.state.schedule;
         temp.push(["","11:30","13:30","", false, false, false, false, false, false, false]);
-        this.setState({schedule: temp, weekly: this.state.weekly}, () => {this.saveSchedule()});
+        this.setState({schedule: temp}, () => {this.saveSchedule()});
     }
     removeTimeSlot = (i) => {
         var temp = this.state.schedule;
         temp.splice(i, 1);
-        this.setState({schedule: temp, weekly: this.state.weekly}, () => {this.saveSchedule()});
+        this.setState({schedule: temp}, () => {this.saveSchedule()});
     }
     toggleWeekly = (e) => {
         /*
@@ -93,7 +93,7 @@ class App extends React.Component {
                return null;
             }*/
         var temp = !this.state.weekly;
-        this.setState({schedule: this.state.schedule, weekly: temp}, () => {this.saveSchedule()});
+        this.setState({weekly: temp}, () => {this.saveSchedule()});
     }
 
     saveSchedule = () => {
