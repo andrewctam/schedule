@@ -13,6 +13,9 @@ class WeeklySchedule extends React.Component {
         var endHr = 0;
         var hours = [];
 
+        var now = new Date();
+        var timeToNextClass = -1;
+ 
         for (var i = 0; i < this.props.schedule.length; i++) {      
             var start = this.stringToDate(this.props.schedule[i][1]);
             var end = this.stringToDate(this.props.schedule[i][2]);
@@ -22,6 +25,12 @@ class WeeklySchedule extends React.Component {
             if (end.getHours() > endHr) {
                 endHr = end.getHours();
             }
+
+            if (this.props.schedule[i][now.getDay() + 4] && now < start) {
+                timeToNextClass = (start - now) / 60000;
+            }
+
+
         }
         
         //create blocks for each class
@@ -56,6 +65,8 @@ class WeeklySchedule extends React.Component {
         if (this.props.schedule.length === 0)
             return (<h1>Click [Edit Schedule] Above to Add Classes</h1>)
 
+
+
         return (<div>
             <div className = "weekly">
             {this.state.timeSlot}
@@ -78,7 +89,7 @@ class WeeklySchedule extends React.Component {
                     </tbody>
                     
                     {blocks}
-                    <CurrentTime startHr = {startHr} endHr = {endHr} />
+                    <CurrentTime ttnc = {timeToNextClass} startHr = {startHr} endHr = {endHr} />
                 </table>
                 </div>
             </div>
@@ -153,9 +164,9 @@ class CurrentTime extends React.Component {
         if (now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr + 1))
             return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
                     {
-                        top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 + "px",
+                        top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 - 28 + "px",
                         left: 12.5 + (new Date().getDay() * 12.5) + "%",
-                    }} />
+                    }}><p>{(this.props.ttnc !== -1 ? this.formatMinutes(this.props.ttnc) : "")}</p></div>
         else 
             return null;
     }
@@ -168,6 +179,21 @@ class CurrentTime extends React.Component {
             time.setSeconds(0);
             return time;
         }
+    }
+
+    formatMinutes = (num) => {
+        var mins = Math.ceil(num);
+        var hrs = Math.floor(mins / 60);
+        var mins = mins % 60;
+
+        var minuteWord = mins === 1 ? " min" : " mins";
+        var hourWord = hrs === 1 ? " hour" : " hours";
+
+        if (hrs === 0) {
+            return mins + minuteWord; 
+        } else
+            return hrs + hourWord + " " + mins + minuteWord;
+
     }
     
     handleClick() {

@@ -212,12 +212,12 @@ td {
 
 
 
-.block, .block > p, th > p, td > p, tr > p {
+.block, .block > p, th > p, td > p, tr > p, .line {
   font-size: 1.5vw;
 }
 
 @media (max-width: 576px) {
-  .block, .block > p, th > p, td > p, tr > p {
+  .block, .block > p, th > p, td > p, tr > p, .line {
     font-size: 2.5vw;
   }
 }
@@ -254,11 +254,28 @@ th > p, td > p, tr > p {
 }
 .line {
   width: 12.5%;
-  height: 1px;
+  height: 30px;
   left: 12.5%;
   margin-left: 0;
   margin-right: 0;
-  background-color: red;
+  border-bottom: 2px solid red;
   position: absolute;
+  text-align: center;
+  color: red;
+  vertical-align: bottom;
+  display: table;
+  
 }
+
+.line > p {
+  vertical-align: bottom;
+  display: table-cell;
+  color: red;
+    text-shadow:
+    -1px -1px 0 rgb(255, 255, 255),
+    1px -1px 0 rgb(255, 255, 255),
+    -1px 1px 0 rgb(255, 255, 255),
+    1px 1px 0 rgb(255, 255, 255);  
+}
+
 </style>
