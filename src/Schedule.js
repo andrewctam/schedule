@@ -29,7 +29,7 @@ class Schedule extends React.Component {
                 key = {"ts" + index}
                 name = {x[0]}       info = {x[3]}
                 startTime = {x[1]}  endTime = {x[2]}
-                when = {classes[index]}
+                when = {classes[classes.length - 1 - index]}
                 />));
 
         } else if (this.props.schedule.length === 0 ) {
@@ -78,9 +78,9 @@ class Schedule extends React.Component {
 
     determineTimes = (timeSlots) => {
         var classes = [];
-                var timeToNextClass = -1;
+        var timeToNextClass = -1;
          
-        for (var i = 0; i < timeSlots.length; i++) {
+        for (var i = timeSlots.length - 1; i > -1; i--) {
             var currentTime = new Date();
             var earlyTime = new Date();
             earlyTime.setMinutes(earlyTime.getMinutes() + 10);

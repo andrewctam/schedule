@@ -156,8 +156,16 @@ class CurrentTime extends React.Component {
         for (var i = 0; i < this.props.schedule.length; i++) {      
             var start = this.stringToDate(this.props.schedule[i][1]);
             var end = this.stringToDate(this.props.schedule[i][2]);
-            if (this.props.schedule[i][now.getDay() + 4] && now < start) {
-                timeToNextClass = (start - now) / 60000;
+            if (this.props.schedule[i][now.getDay() + 4]) {
+                if (now < start) {
+                    var time = ((start - now) / 60000);
+                    if (time < timeToNextClass || timeToNextClass === -1)
+                        timeToNextClass = time;
+
+                } else if (now < end) {
+                    timeToNextClass = -1;
+                    break;
+                }
             }
 
         }
