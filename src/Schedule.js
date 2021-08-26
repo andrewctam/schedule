@@ -15,10 +15,14 @@ class Schedule extends React.Component {
                 scheduleToday.push(this.props.schedule[j]);
             }
         }
-        
+
+         
+
         if (scheduleToday.length > 0) {
             scheduleToday = this.sortTimeSlots(scheduleToday);
-            var classes = this.determineClasses(scheduleToday);
+            var result = this.determineTimes(scheduleToday);
+            var classes = result[0]
+            var timeToNextClass = result[1]
 
             scheduleToRender = (scheduleToday.map((x, index) => 
                 <TimeSlot
@@ -35,9 +39,25 @@ class Schedule extends React.Component {
         }
 
         
-        return <div>{scheduleToRender}</div>; 
+        return <div><p>{this.formatMinutes(timeToNextClass)}</p>{scheduleToRender}</div>; 
     }
     
+    formatMinutes = (num) => {
+        if (num === -1) 
+            return "";
+        var mins = Math.floor(num);
+        var hrs = Math.floor(mins / 60);
+        var mins = mins % 60;
+
+        var minuteWord = mins === 1 ? " min" : " mins";
+        var hourWord = hrs === 1 ? " hour" : " hours";
+
+        if (hrs === 0) {
+            return mins + minuteWord + " to next class"; 
+        } else
+            return hrs + hourWord + " " + mins + minuteWord + " to next class";
+            
+    }
     sortTimeSlots = (timeSlots) => { //simple x^2 sort
         var minJ;
         for (var i = 0; i < timeSlots.length; i++) {    
@@ -56,8 +76,10 @@ class Schedule extends React.Component {
         return timeSlots;
     }
 
-    determineClasses = (timeSlots) => {
+    determineTimes = (timeSlots) => {
         var classes = [];
+                var timeToNextClass = -1;
+         
         for (var i = 0; i < timeSlots.length; i++) {
             var currentTime = new Date();
             var earlyTime = new Date();
@@ -67,17 +89,20 @@ class Schedule extends React.Component {
             var endTime = this.stringToDate(timeSlots[i][2]);
             
             if (currentTime <= endTime || timeSlots[i][2] === "") { //10:00 < 12:00
-                if (startTime <= currentTime)
+                if (startTime <= currentTime) 
                     classes.push("classInProgress");
-                else if (startTime <= earlyTime)
-                    classes.push("classSoon");
-                else 
-                    classes.push("classInFuture");
+                else {
+                    timeToNextClass = (startTime - currentTime) / 60000
+                    if (startTime <= earlyTime)
+                        classes.push("classSoon");
+                    else 
+                        classes.push("classInFuture");
+                }
             }
             else 
                 classes.push("classOver");
         }
-        return classes;
+        return [classes, timeToNextClass];
     }
 
     stringToDate = (str) => {

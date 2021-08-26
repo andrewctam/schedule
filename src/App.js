@@ -16,7 +16,7 @@ class App extends React.Component {
             link = link.substring(delim + 1);
             
             var savedSchedule = decompressFromBase64(link);
-            var weekly = false;
+            var weekly = true;
             if (delim !== -1) {
                 weekly = savedSchedule.substring(0, 1) === "1";
                 const timeSlots = savedSchedule.split('>');
