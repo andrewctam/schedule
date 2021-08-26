@@ -167,7 +167,7 @@ class CurrentTime extends React.Component {
                     {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 - 28 + "px",
                         left: 12.5 + (new Date().getDay() * 12.5) + "%",
-                    }}><p>{(timeToNextClass !== -1 ? this.formatMinutes(timeToNextClass) : "")}</p></div>
+                    }}><p>{(timeToNextClass !== -1 ? this.formatMinutes(timeToNextClass) : " ")}</p></div>
         else 
             return null;
     }
@@ -183,7 +183,7 @@ class CurrentTime extends React.Component {
     }
 
     stringToDate = (str) => {
-        if (str!= null) {
+        if (str != null) {
             var hrs = str.substring(0, 2);
             var mins = str.substring(3, 5);
             var time = new Date();
@@ -206,7 +206,7 @@ class CurrentTime extends React.Component {
             return mins + minuteWord; 
         } else
             return hrs + hourWord + " " + mins + minuteWord;
-
+            
     }
     
     handleClick = () => {
