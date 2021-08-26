@@ -167,7 +167,7 @@ class CurrentTime extends React.Component {
                     {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 - 28 + "px",
                         left: 12.5 + (new Date().getDay() * 12.5) + "%",
-                    }}><p>{(timeToNextClass !== -1 ? this.formatMinutes(timeToNextClass) : " ")}</p></div>
+                    }}><p>{(timeToNextClass !== -1 ? this.formatMinutes(timeToNextClass) : "No more classes")}</p></div>
         else 
             return null;
     }
