@@ -79,7 +79,7 @@ class Editor extends React.Component {
         if (window.location.href.length >= 2000)
             msg = <p className = "editorInfo">{"Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
         else if (this.props.schedule.length > 0)
-            msg = <p className = "editorInfo">{"You can save your schedule by bookmarking this page or copying "} <a href = {window.location.href}>{"this link"}</a>{" (same as link in address bar)" + (this.props.weekly ? "If you want your schedule to display earlier or later times, you can create an new class and set the start and end times to your desired times, but leave all the other inputs empty" :  "")}</p>;
+            msg = <p className = "editorInfo">{"You can save your schedule by bookmarking this page or copying "} <a href = {window.location.href}>{"this link"}</a>{" (same as link in address bar)." + (this.props.weekly ? " If you want your schedule to display earlier or later times, you can create an new class and set the start and end times to your desired times, but leave all the other inputs empty" :  "")}</p>;
         else
             msg = <p className = "editorInfo">{"Your schedule is currently empty. Click [Add Class] below to add a new class"}</p>;
 
