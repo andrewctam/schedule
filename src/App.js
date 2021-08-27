@@ -49,7 +49,13 @@ class App extends React.Component {
 
     }
     render() {
-
+        var days = [1, 2, 3, 4, 5];
+        for (var i = 0; i < this.state.schedule.length; i++) {
+            if (this.state.schedule[i][4] || this.state.schedule[i][10]) {
+                days = [0, 1, 2, 3, 4, 5, 6]
+                break;
+            }
+        }
 
         return (
         <div>
@@ -62,7 +68,7 @@ class App extends React.Component {
             /> 
             
             {this.state.weekly ? 
-                <WeeklySchedule schedule={this.state.schedule}/> 
+                <WeeklySchedule days = {days} schedule={this.state.schedule}/> 
                 : <Schedule schedule={this.state.schedule}/>
             }
         </div>

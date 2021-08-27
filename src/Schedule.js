@@ -45,7 +45,7 @@ class Schedule extends React.Component {
     formatMinutes = (num) => {
         if (num === -1) 
             return "";
-        var mins = Math.floor(num);
+        var mins = Math.ceil(num);
         var hrs = Math.floor(mins / 60);
         var mins = mins % 60;
 
