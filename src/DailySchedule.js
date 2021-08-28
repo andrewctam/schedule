@@ -46,7 +46,7 @@ class DailySchedule extends React.Component {
     }
     
     formatMinutes = (num) => {
-        if (num === -1 || this.props.schedule.length === 0) 
+        if (isNaN(num) || num === -1) 
             return "";
         var mins = Math.ceil(num);
         var hrs = Math.floor(mins / 60);
