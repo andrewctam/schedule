@@ -39,11 +39,14 @@ class DailySchedule extends React.Component {
         }
 
         
-        return <div><p>{this.formatMinutes(timeToNextClass)}</p>{scheduleToRender}</div>; 
+        return (<div>
+                    <p>{this.formatMinutes(timeToNextClass)}</p>
+                    {scheduleToRender}
+                </div>); 
     }
     
     formatMinutes = (num) => {
-        if (num === -1) 
+        if (num === -1 || this.props.schedule.length === 0) 
             return "";
         var mins = Math.ceil(num);
         var hrs = Math.floor(mins / 60);
@@ -51,7 +54,7 @@ class DailySchedule extends React.Component {
 
         var minuteWord = mins === 1 ? " min" : " mins";
         var hourWord = hrs === 1 ? " hour" : " hours";
-
+        
         if (hrs === 0) {
             return mins + minuteWord + " to next class"; 
         } else
