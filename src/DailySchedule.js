@@ -2,7 +2,7 @@
 import React from 'react';
 import TimeSlot from './TimeSlot.js'
 
-class Schedule extends React.Component { 
+class DailySchedule extends React.Component { 
     forceScheduleUpdate = () => {this.forceUpdate();}   
     render() {               
         const today = new Date();   
@@ -134,4 +134,4 @@ class Schedule extends React.Component {
     }
 }
 
-export default Schedule;
+export default DailySchedule;

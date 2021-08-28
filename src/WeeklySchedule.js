@@ -53,7 +53,7 @@ class WeeklySchedule extends React.Component {
 
         
         if (this.props.schedule.length === 0)
-            return (<h1>Click [Edit Schedule] Above to Add Classes or click below to generate a example <button className = "btn btn-primary" onClick = {() => this.props.generateExample()}>Generate Example Schedule</button></h1>)
+            return (<h6>Click [Edit Schedule] Above to Add Classes or click below to generate an example <button className = "btn btn-primary" onClick = {() => this.props.generateExample()}>Generate Example Schedule</button></h6>)
 
 
         var daysHeader = [<th scope="col"><p>Time</p></th>];

@@ -1,6 +1,6 @@
 import React from 'react';
 import Editor from './Editor.js';
-import Schedule from './Schedule.js';
+import DailySchedule from './DailySchedule.js';
 import WeeklySchedule from './WeeklySchedule.js';
 import { decompressFromBase64 } from "lz-string"
 import { compressToBase64 } from "lz-string"
@@ -73,7 +73,7 @@ class App extends React.Component {
             
             {this.state.weekly ? 
                 <WeeklySchedule days = {days} schedule={this.state.schedule} generateExample = {this.exampleSchedule}/> 
-                : <Schedule schedule={this.state.schedule}/>
+                : <DailySchedule schedule={this.state.schedule}/>
             }
         </div>
         //schedule is {[name, startTime, endTime, link, sun ... sat], ...}
@@ -148,7 +148,7 @@ class App extends React.Component {
             ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, false, false, false, false],
             ];
 
-        this.setState({schedule: temp});
+        this.setState({schedule: temp}, () => {this.saveSchedule()});
     }
 
     
