@@ -49,6 +49,8 @@ class App extends React.Component {
 
     }
     render() {
+
+        
         var days = [1, 2, 3, 4, 5];
         for (var i = 0; i < this.state.schedule.length; i++) {
             if (this.state.schedule[i][4] || this.state.schedule[i][10]) {
@@ -56,6 +58,8 @@ class App extends React.Component {
                 break;
             }
         }
+
+
 
         return (
         <div>
@@ -68,7 +72,7 @@ class App extends React.Component {
             /> 
             
             {this.state.weekly ? 
-                <WeeklySchedule days = {days} schedule={this.state.schedule}/> 
+                <WeeklySchedule days = {days} schedule={this.state.schedule} generateExample = {this.exampleSchedule}/> 
                 : <Schedule schedule={this.state.schedule}/>
             }
         </div>
@@ -133,6 +137,18 @@ class App extends React.Component {
             url.search = urlParams;
             window.history.pushState({}, '', url);
 
+    }
+
+    exampleSchedule = () => {
+        var temp = [
+            ["BIO 102", "10:15", "11:45", "Hall 102", false, true, false, true, false, true, false],
+            ["AMS 201", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false],
+            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false],
+            ["MUS 101", "08:30", "09:40", "https://zoom.us/...",  false, true, false, true, false, false, false],
+            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, false, false, false, false],
+            ];
+
+        this.setState({schedule: temp});
     }
 
     
