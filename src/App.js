@@ -73,7 +73,8 @@ class App extends React.Component {
             
             {this.state.weekly ? 
                 <WeeklySchedule days = {days} schedule={this.state.schedule} generateExample = {this.exampleSchedule}/> 
-                : <DailySchedule schedule={this.state.schedule}/>
+                : 
+                <DailySchedule schedule={this.state.schedule} generateExample = {this.exampleSchedule}/>
             }
         </div>
         //schedule is {[name, startTime, endTime, link, sun ... sat], ...}

@@ -33,9 +33,14 @@ class DailySchedule extends React.Component {
                 />));
 
         } else if (this.props.schedule.length === 0 ) {
-            scheduleToRender = (<h1>Click [Edit Schedule] Above to Add Classes</h1>)
+            return (<div className = "example">
+                        <h6>Click [Edit Schedule] above to add classes or click below to generate an example</h6>
+                        <button className = "btn btn-primary example" 
+                        onClick = {() => this.props.generateExample()}>
+                        Generate Example Schedule</button>
+                    </div>);        
         } else {
-            scheduleToRender = (<h1>No Classes Today</h1>)
+            return (<h1>No Classes Today</h1>);
         }
 
         

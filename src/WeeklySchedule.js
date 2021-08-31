@@ -54,7 +54,7 @@ class WeeklySchedule extends React.Component {
         
         if (this.props.schedule.length === 0)
             return (<div className = "example">
-                        <h6>Click [Edit Schedule] Above to Add Classes or click below to generate an example</h6>
+                        <h6>Click [Edit Schedule] above to add classes or click below to generate an example</h6>
                         <button className = "btn btn-primary example" 
                         onClick = {() => this.props.generateExample()}>
                         Generate Example Schedule</button>
