@@ -79,7 +79,16 @@ class Editor extends React.Component {
         if (window.location.href.length >= 2000)
             msg = <p className = "editorInfo">{"Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
         else if (this.props.schedule.length > 0)
-            msg = <p className = "editorInfo">{"You can save your schedule by bookmarking this page or copying "}  <a href = {window.location.href}>{"this link"}</a>{" (same as link in address bar)."  + (this.props.weekly ? " If you want your schedule to display earlier or later times, you can create an new class and set the start and end times to your desired times, but leave all the other inputs empty" :  "")}</p>;
+            msg = <div className = "editorInfo">
+                <h1>Information</h1>
+                <ul>
+                    <li><p>{"You can save your schedule by bookmarking this page (or save it directly to your homescreen on your mobile device) or by copying and saving "}  <a href = {window.location.href}>{"this link"}</a>  {" (same as link in address bar)."}</p></li>
+                    <li><p>{(this.props.weekly ? " If you click on a block in the schedule, it will open a box at the top of the page with full information about the class. If the class has a link, clicking on this box will open the link in a new tab " :
+                                                  "If you click on a class and it has a link, the link will open in a new tab")}</p></li>
+                    <li><p>{(this.props.weekly ? " If you want your schedule to display earlier or later times, you can create an new class and set the start and end times to your desired times, but leave all the other inputs empty" :  
+                                                    "Classes will only show in the list on days that the class meets on.")}</p></li>
+                </ul>
+                </div>;
         else
             msg = <p className = "editorInfo">{"Your schedule is currently empty. Click [Add Class] below to add a new class"}</p>;
 
