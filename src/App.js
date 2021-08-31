@@ -11,9 +11,13 @@ class App extends React.Component {
         super(props);
         var scheduleFromLink = [];
             //Check to see if the link has parameters
-            var link = window.location.href;
-            var delim = link.indexOf('?');
-            link = link.substring(delim + 1);
+            if (window.navigator.standAlone === false) {
+                var link = window.location.href;
+                var delim = link.indexOf('?');
+                link = link.substring(delim + 1);
+            } else {
+                link = localStorage.getItem('savedURL');
+            }
             
             var savedSchedule = decompressFromBase64(link);
             var weekly = true;
@@ -129,9 +133,15 @@ class App extends React.Component {
             } else
                 urlParams = "";
                 
+            localStorage.setItem('savedURL', urlParams);
+
+
             const url = new URL(window.location);
             url.search = urlParams;
             window.history.pushState({}, '', url);
+            
+
+
 
     }
 
