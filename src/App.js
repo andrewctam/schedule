@@ -75,7 +75,7 @@ class App extends React.Component {
             removeFromSchedule = {this.removeTimeSlot}
             toggleWeekly = {this.toggleWeekly}
             weekly = {this.state.weekly}
-            link = {"https://andrewtam.org/test/?" + this.state.savedURL}
+            link = {"https://andrewtam.org/schedule/?" + this.state.savedURL}
 
             /> 
             
