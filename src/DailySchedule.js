@@ -55,7 +55,7 @@ class DailySchedule extends React.Component {
             return "";
         var mins = Math.ceil(num);
         var hrs = Math.floor(mins / 60);
-        var mins = mins % 60;
+        mins = mins % 60;
 
         var minuteWord = mins === 1 ? " min" : " mins";
         var hourWord = hrs === 1 ? " hour" : " hours";

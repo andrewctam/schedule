@@ -25,9 +25,9 @@ class WeeklySchedule extends React.Component {
         }
         //create blocks for each class
         var blocks = [];
-        for (var i = 0; i < this.props.schedule.length; i++) {      
-            var start = this.stringToDate(this.props.schedule[i][1]);
-            var end = this.stringToDate(this.props.schedule[i][2]);
+        for (i = 0; i < this.props.schedule.length; i++) {      
+            start = this.stringToDate(this.props.schedule[i][1]);
+            end = this.stringToDate(this.props.schedule[i][2]);
             var lengthInMins = (end.getHours() - start.getHours()) * 60 + end.getMinutes() - start.getMinutes();
       
             for (var j = 0; j < this.props.days.length; j++)
@@ -47,7 +47,7 @@ class WeeklySchedule extends React.Component {
         }
 
         //create the hours 
-        for (var i = startHr; i <= endHr; i++) {
+        for (i = startHr; i <= endHr; i++) {
             hours.push(<Hour time = {i} numOfDays = {this.props.days.length} />)
         }
 
@@ -63,7 +63,7 @@ class WeeklySchedule extends React.Component {
 
         var daysHeader = [<th scope="col"><p>Time</p></th>];
         var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        for (var i = 0; i < this.props.days.length; i++) {
+        for (i = 0; i < this.props.days.length; i++) {
             daysHeader.push(<th scope="col">   <p>{days[this.props.days[i]]}</p>   </th>);
         } 
 
@@ -122,7 +122,7 @@ class Hour extends React.Component {
         if (isNaN(hrs)) {
             var meridian = "";
         } else {
-            var meridian = hrs < 12 ? "AM" : "PM";
+            meridian = hrs < 12 ? "AM" : "PM";
 
             if (hrs > 12) {
                 hrs %= 12;
@@ -165,7 +165,7 @@ class CurrentTime extends React.Component {
 
         }
 
-        for (var i = 0; i < this.props.days.length; i++) {
+        for (i = 0; i < this.props.days.length; i++) {
             if (new Date().getDay() === this.props.days[i]) {
                 var date = i + 1;
                 break;
@@ -207,7 +207,7 @@ class CurrentTime extends React.Component {
     formatMinutes = (num) => {
         var mins = Math.ceil(num);
         var hrs = Math.floor(mins / 60);
-        var mins = mins % 60;
+        mins = mins % 60;
 
         var minuteWord = mins === 1 ? " min" : " mins";
         var hourWord = hrs === 1 ? " hour" : " hours";

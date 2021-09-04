@@ -10,50 +10,54 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         var scheduleFromLink = [];
-            //Check to see if the link has parameters
-            if (window.navigator.standAlone === false) {
-                var link = window.location.href;
+        //Check to see if the link has parameters
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            var link = localStorage.getItem('savedURL');
+            if (link === "" || link === null) {
+                link = window.location.href;
                 var delim = link.indexOf('?');
                 link = link.substring(delim + 1);
-            } else {
-                link = localStorage.getItem('savedURL');
             }
+        } else {
+            link = window.location.href;
+            delim = link.indexOf('?');
+            link = link.substring(delim + 1);
+        }
+        
+        var savedSchedule = decompressFromBase64(link);
+        var weekly = true;
+        if (delim !== -1) {
+            weekly = savedSchedule.substring(0, 1) === "1";
+            const timeSlots = savedSchedule.split('>');
+            for (var i = 1; i < timeSlots.length; i++) {
+                var currentTimeSlot = timeSlots[i].split('<');
+                //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
             
-            var savedSchedule = decompressFromBase64(link);
-            var weekly = true;
-            if (delim !== -1) {
-                weekly = savedSchedule.substring(0, 1) === "1";
-                const timeSlots = savedSchedule.split('>');
-                for (var i = 1; i < timeSlots.length; i++) {
-                    var currentTimeSlot = timeSlots[i].split('<');
-                    //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
-                
-                    var daysList = [false, false, false, false, false, false, false];
-                    for (var j = 4; j < currentTimeSlot.length; j++) {
-                        daysList[parseInt(currentTimeSlot[j])] = true;
-                    }
-                    
-                    scheduleFromLink.push([ 
-                        currentTimeSlot[0],
-                        currentTimeSlot[1],
-                        currentTimeSlot[2],
-                        currentTimeSlot[3],
-                        daysList[0],
-                        daysList[1],
-                        daysList[2],
-                        daysList[3],
-                        daysList[4],
-                        daysList[5],
-                        daysList[6]
-                    ]);
-
+                var daysList = [false, false, false, false, false, false, false];
+                for (var j = 4; j < currentTimeSlot.length; j++) {
+                    daysList[parseInt(currentTimeSlot[j])] = true;
                 }
+                
+                scheduleFromLink.push([ 
+                    currentTimeSlot[0],
+                    currentTimeSlot[1],
+                    currentTimeSlot[2],
+                    currentTimeSlot[3],
+                    daysList[0],
+                    daysList[1],
+                    daysList[2],
+                    daysList[3],
+                    daysList[4],
+                    daysList[5],
+                    daysList[6]
+                ]);
+
             }
-        this.state = { schedule: scheduleFromLink, weekly: weekly};
+        }
+        this.state = { schedule: scheduleFromLink, weekly: weekly, savedURL: link};
 
     }
     render() {
-
         
         var days = [1, 2, 3, 4, 5];
         for (var i = 0; i < this.state.schedule.length; i++) {
@@ -63,8 +67,6 @@ class App extends React.Component {
             }
         }
 
-
-
         return (
         <div>
             <Editor schedule={this.state.schedule} 
@@ -73,6 +75,8 @@ class App extends React.Component {
             removeFromSchedule = {this.removeTimeSlot}
             toggleWeekly = {this.toggleWeekly}
             weekly = {this.state.weekly}
+            link = {"https://andrewtam.org/test/?" + this.state.savedURL}
+
             /> 
             
             {this.state.weekly ? 
@@ -139,6 +143,8 @@ class App extends React.Component {
             const url = new URL(window.location);
             url.search = urlParams;
             window.history.pushState({}, '', url);
+
+            this.setState({savedURL: urlParams})
             
 
 

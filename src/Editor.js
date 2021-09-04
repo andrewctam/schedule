@@ -4,9 +4,123 @@ import TimeSlotEditor from './TimeSlotEditor.js'
 class Editor extends React.Component {
     constructor(props) {
         super(props);
+
+        var showMsg = false;
+
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)  || navigator.userAgent.match(/iPod/i)  || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)
+        && (localStorage.getItem("hideAddToHomeScreen") !== "false"))
+            showMsg = true;
+            
         this.state = {
             editorActive: false,
+            showAddToHomeScreen: showMsg
         }
+    }
+
+    render() {
+        var userInPWA = window.matchMedia('(display-mode: standalone)').matches;
+
+        var timeSlotEditors = this.props.schedule.map((timeSlot, index) => 
+            <TimeSlotEditor
+                key = {"tse" + index}
+                id = {index}
+                updateSchedule={this.props.updateSchedule}
+                removeFromSchedule={this.props.removeFromSchedule}
+                name = {timeSlot[0]}
+                startTime = {timeSlot[1]}
+                endTime = {timeSlot[2]}
+                info = {timeSlot[3]}
+                sun = {timeSlot[4]}
+                mon = {timeSlot[5]}
+                tue = {timeSlot[6]}
+                wed = {timeSlot[7]}
+                thu = {timeSlot[8]}
+                fri = {timeSlot[9]}
+                sat = {timeSlot[10]}
+            />);
+
+    
+        if (this.props.link >= 2000)
+            var msg = <p className = "editorInfo">{"Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
+        else if (this.props.schedule.length > 0)
+            msg = (<div className = "editorInfo">
+                    <h1>Information</h1>
+                    <ul>
+                        {
+                        userInPWA ? 
+                        <li style = {{backgroundColor: "rgb(255, 200, 200)"}}>
+                            <p>{"WARNING: Your schedule and any new edits are automatically saved, but if you clear your browser's history/cookies, any changes to your schedule made after you first added the app may be deleted."}</p>
+                            <p>{"To guarantee that your changes are not deleted: once you finish your edits, go to the link below in your web browser and re-add this app to the home screen (and you can delete the old one)."}</p>
+                        </li>
+                        :
+                        <li><p>{"You can save your schedule by bookmarking this page (or save it directly to your home screen on your mobile device, which will make it an app) or by copying and saving the link below (same as link in address bar)"}</p></li>
+                        }
+                        <li><input className = "linkResult" inputMode = "none" onClick = {this.handleSelect} value = {this.props.link} /></li>
+                        <li><p>{(this.props.weekly ? " If you click on a block in the schedule, it will open a box at the top of the page with full information about the class. If the class has a link, clicking on this box will open the link in a new tab " :
+                                                    "If you click on a class and it has a link, the link will open in a new tab")}</p></li>
+                        <li><p>{(this.props.weekly ? " If you want your schedule to display earlier or later times, you can create an new class and set the start and end times to your desired times, but leave all the other inputs empty" :  
+                                                        "Classes will only show in the list on days that the class meets on.")}</p></li>
+                    </ul>
+                    </div>);
+        else
+            msg = <p className = "editorInfo">{"Your schedule is currently empty. Click [Add Class] below to add a new class"}</p>;
+
+        var editor = (
+        <div>
+            {msg}
+            <div className="form-check form-switch">
+                <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
+                <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
+            </div>
+            <div className = "editors"><hr />{timeSlotEditors}</div>
+            <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
+            <hr/>
+            
+        </div>)
+   
+            
+        return (<div className = "Editor">
+             <div className = "row">
+                <div className = "col-sm-6">
+                    <Clock/>
+                </div>
+                <div className = "col-sm-6 editSchedule">
+                    <button type = "button" className = "btn btn-secondary" 
+                    onClick = {this.toggleAndVerify}>
+                        {this.state.editorActive ? "Close Editor" : "Edit Schedule"}  
+                    </button>
+                </div>
+             </div>
+                
+            {!userInPWA && this.state.showAddToHomeScreen && this.props.schedule.length > 0 ? 
+            <div style = {{backgroundColor: "rgb(255, 200, 200)"}} className = "row editorInfo">
+                <p>{"You can save this app to your mobile device's homescreen and save it as an app, allowing this app to work offline and be accessed in the app switcher."}</p> 
+                <ul><li>On iOS on Safari, click the Share icon (to the left of +) and select Add To Homescreen.</li>
+                <li>On Android on Chrome, open the three dots menu and select Add To Homescreen.</li>
+                </ul>
+            <button className = "btn btn-light" onClick = {this.handleHide}>Close Message</button></div> 
+            : null}
+
+            
+            {this.state.editorActive ? editor : <hr/>} 
+            </div>);
+    }
+  
+    handleHide = (e) => {
+        localStorage.setItem("hideAddToHomeScreen", "false");
+        this.setState({showAddToHomeScreen: false});
+    }
+    
+    handleSelect = (e) => {
+        e.target.select();
+
+    }
+    handleAdd = (e) => {
+        this.props.addToSchedule();
+    }
+
+    handleChecked = (e) => {
+        this.props.toggleWeekly();
     }
 
     stringToDate = (str) => {
@@ -24,7 +138,7 @@ class Editor extends React.Component {
         if (this.state.editorActive)
             for (var i = 0; i < this.props.schedule.length; i++) {
                 if (this.stringToDate(this.props.schedule[i][2]) < this.stringToDate(this.props.schedule[i][1])) {
-                    if (this.props.schedule[i][0] == "") 
+                    if (this.props.schedule[i][0] === "") 
                         switch (i + 1) {
                             case 1:
                                 var identifier = "the " + (i + 1) + "st class";
@@ -55,87 +169,7 @@ class Editor extends React.Component {
         this.setState({editorActive: !this.state.editorActive})
 
     }
-    render() {
-        var timeSlotEditors = this.props.schedule.map((timeSlot, index) => 
-            <TimeSlotEditor
-                key = {"tse" + index}
-                id = {index}
-                updateSchedule={this.props.updateSchedule}
-                removeFromSchedule={this.props.removeFromSchedule}
-                name = {timeSlot[0]}
-                startTime = {timeSlot[1]}
-                endTime = {timeSlot[2]}
-                info = {timeSlot[3]}
-                sun = {timeSlot[4]}
-                mon = {timeSlot[5]}
-                tue = {timeSlot[6]}
-                wed = {timeSlot[7]}
-                thu = {timeSlot[8]}
-                fri = {timeSlot[9]}
-                sat = {timeSlot[10]}
-            />);
 
-        var msg;
-        if (window.location.href.length >= 2000)
-            msg = <p className = "editorInfo">{"Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
-        else if (this.props.schedule.length > 0)
-            msg = <div className = "editorInfo">
-                <h1>Information</h1>
-                <ul>
-                    <li><p>{"You can save your schedule by bookmarking this page (or save it directly to your homescreen on your mobile device) or by copying and saving "}  <a href = {window.location.href}>{"this link"}</a>  {" (same as link in address bar)."}</p></li>
-                    <li><p>{(this.props.weekly ? " If you click on a block in the schedule, it will open a box at the top of the page with full information about the class. If the class has a link, clicking on this box will open the link in a new tab " :
-                                                  "If you click on a class and it has a link, the link will open in a new tab")}</p></li>
-                    <li><p>{(this.props.weekly ? " If you want your schedule to display earlier or later times, you can create an new class and set the start and end times to your desired times, but leave all the other inputs empty" :  
-                                                    "Classes will only show in the list on days that the class meets on.")}</p></li>
-                </ul>
-                </div>;
-        else
-            msg = <p className = "editorInfo">{"Your schedule is currently empty. Click [Add Class] below to add a new class"}</p>;
-
-        var editor = (
-        <div>
-            {msg}
-            <div className="form-check form-switch">
-                <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
-                <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
-    
-            </div>
-
-        
-            <div className = "editors"><hr />{timeSlotEditors}</div>
-            <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
-            <hr/>
-            
-        </div>)
-   
-            
-        return (<div className = "Editor">
-             <div className = "row">
-                <div className = "col-sm-6">
-                    <Clock/>
-                </div>
-                <div className = "col-sm-6 editSchedule">
-                    <button type = "button" className = "btn btn-secondary" 
-                    onClick = {this.toggleAndVerify}>
-                        {this.state.editorActive ? "Close Editor" : "Edit Schedule"}  
-                    </button>
-                </div>
-
-                
-
-             </div>
-
-            {this.state.editorActive ? editor : <hr/>} 
-            </div>);
-    }
-  
-    handleAdd = (e) => {
-        this.props.addToSchedule();
-    }
-
-    handleChecked = (e) => {
-        this.props.toggleWeekly();
-    }
 }
 
 class Clock extends React.Component {
