@@ -8,14 +8,12 @@ class Editor extends React.Component {
         this.state = {
             editorActive: false,
             showAddToHomeScreen: (localStorage.getItem("showAddToHomeScreen") !== "false") && 
-                                 (navigator.userAgent.match(/Android/i) ||
+                                 (navigator.userAgent.match(/iPhone/i) ||
+                                  navigator.userAgent.match(/Android/i) ||
                                   navigator.userAgent.match(/webOS/i) ||
-                                  navigator.userAgent.match(/iPhone/i) ||
                                   navigator.userAgent.match(/iPad/i)  ||
-                                  navigator.userAgent.match(/iPod/i)  ||
-                                  navigator.userAgent.match(/BlackBerry/i) ||
-                                  navigator.userAgent.match(/Windows Phone/i)
-                                  )
+                                  navigator.userAgent.match(/iPod/i) 
+                                )
         }
     }
 
@@ -97,8 +95,8 @@ class Editor extends React.Component {
             {!userInPWA && this.state.showAddToHomeScreen && this.props.schedule.length > 0 ? 
             <div style = {{backgroundColor: "rgb(255, 200, 200)"}} className = "row editorInfo">
                 <p>{"You can save this app to your mobile device's homescreen and save it as an app, allowing this app to work offline and be accessed in the app switcher."}</p> 
-                <ul><li>On iOS on Safari, click the Share icon (to the left of +) and select Add To Homescreen.</li>
-                <li>On Android on Chrome, open the three dots menu and select Add To Homescreen.</li>
+                <ul><li>On iOS on Safari, click the Share icon (box with up arrow) and select Add To Home Screen.</li>
+                <li>On Android on Chrome, open the three dots menu and select Add To Home Screen.</li>
                 </ul>
             <button className = "btn btn-light" onClick = {this.handleHide}>Close Message</button></div> 
             : null}
