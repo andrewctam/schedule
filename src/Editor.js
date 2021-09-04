@@ -5,15 +5,17 @@ class Editor extends React.Component {
     constructor(props) {
         super(props);
 
-        var showMsg = false;
-
-        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)  || navigator.userAgent.match(/iPod/i)  || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)
-        && (localStorage.getItem("hideAddToHomeScreen") !== "false"))
-            showMsg = true;
-            
         this.state = {
             editorActive: false,
-            showAddToHomeScreen: showMsg
+            showAddToHomeScreen: (localStorage.getItem("showAddToHomeScreen") !== "false") && 
+                                 (navigator.userAgent.match(/Android/i) ||
+                                  navigator.userAgent.match(/webOS/i) ||
+                                  navigator.userAgent.match(/iPhone/i) ||
+                                  navigator.userAgent.match(/iPad/i)  ||
+                                  navigator.userAgent.match(/iPod/i)  ||
+                                  navigator.userAgent.match(/BlackBerry/i) ||
+                                  navigator.userAgent.match(/Windows Phone/i)
+                                  )
         }
     }
 
@@ -107,7 +109,7 @@ class Editor extends React.Component {
     }
   
     handleHide = (e) => {
-        localStorage.setItem("hideAddToHomeScreen", "false");
+        localStorage.setItem("showAddToHomeScreen", "false");
         this.setState({showAddToHomeScreen: false});
     }
     
