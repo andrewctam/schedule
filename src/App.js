@@ -12,12 +12,14 @@ class App extends React.Component {
         var scheduleFromLink = [];
         //Check to see if the link has parameters
         if (window.matchMedia('(display-mode: standalone)').matches) {
+
             var link = localStorage.getItem('savedURL');
             if (link === "" || link === null) {
                 link = window.location.href;
                 var delim = link.indexOf('?');
                 link = link.substring(delim + 1);
             }
+
         } else {
             link = window.location.href;
             delim = link.indexOf('?');
@@ -58,7 +60,6 @@ class App extends React.Component {
 
     }
     render() {
-        
         var days = [1, 2, 3, 4, 5];
         for (var i = 0; i < this.state.schedule.length; i++) {
             if (this.state.schedule[i][4] || this.state.schedule[i][10]) {

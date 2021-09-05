@@ -69,7 +69,7 @@ class WeeklySchedule extends React.Component {
 
         return (<div>
             <div className = "weekly">
-            {this.state.timeSlot}
+                {this.state.timeSlot}
                 <table className = "table" >
                     <thead onClick = {() => this.setState({timeSlot: null})} >
                         <tr>{daysHeader}</tr>
@@ -80,7 +80,7 @@ class WeeklySchedule extends React.Component {
                     </tbody>
                     
                     {blocks}
-                    <CurrentTime days = {this.props.days} schedule = {this.props.schedule} startHr = {startHr} endHr = {endHr} />
+                    <CurrentTime key = "currentTime" days = {this.props.days} schedule = {this.props.schedule} startHr = {startHr} endHr = {endHr} />
                 </table>
                 </div>
             </div>
@@ -102,8 +102,8 @@ class WeeklySchedule extends React.Component {
     handleClick = (e) => {
 
         this.setState({timeSlot:
-             <TimeSlot
-             when = {"classInFuture"}
+            <TimeSlot
+            when = {"classInFuture"}
             name = {this.props.schedule[e.target.id][0]}       info = {this.props.schedule[e.target.id][3]}
             startTime = {this.props.schedule[e.target.id][1]}  endTime = {this.props.schedule[e.target.id][2]}
             />
@@ -116,14 +116,12 @@ class WeeklySchedule extends React.Component {
 
 class Hour extends React.Component {
     render() {
-
         var hrs = this.props.time;
 
         if (isNaN(hrs)) {
             var meridian = "";
         } else {
             meridian = hrs < 12 ? "AM" : "PM";
-
             if (hrs > 12) {
                 hrs %= 12;
             } else if (hrs === 0) {
@@ -131,12 +129,10 @@ class Hour extends React.Component {
             }
         }
 
-
         return (
                 <tr>
                     <th scope="row" style = {{verticalAlign: "top"}}><p>{hrs + " " + meridian }</p></th>
                     {new Array(this.props.numOfDays).fill(<td />)}
-                    
                 </tr>
 
         )
@@ -146,19 +142,19 @@ class Hour extends React.Component {
 class CurrentTime extends React.Component {
     render() {
         var now = new Date();
-        var timeToNextClass = -1;
+        var leastTimeToNextClass = -1;
  
         for (var i = 0; i < this.props.schedule.length; i++) {      
             var start = this.stringToDate(this.props.schedule[i][1]);
             var end = this.stringToDate(this.props.schedule[i][2]);
             if (this.props.schedule[i][now.getDay() + 4]) {
                 if (now < start) {
-                    var time = ((start - now) / 60000);
-                    if (time < timeToNextClass || timeToNextClass === -1)
-                        timeToNextClass = time;
+                    var timeToNextClass = ((start - now) / 60000);
+                    if (timeToNextClass < leastTimeToNextClass || leastTimeToNextClass === -1)
+                    leastTimeToNextClass = timeToNextClass;
 
-                } else if (now < end) {
-                    timeToNextClass = -1;
+                } else if (now < end) { //in middle of a class
+                    leastTimeToNextClass = -1;
                     break;
                 }
             }
@@ -177,7 +173,7 @@ class CurrentTime extends React.Component {
                     {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 - 28 + "px",
                         left: (date * (100 / (this.props.days.length + 1))) + "%",
-                    }}><p>{(timeToNextClass !== -1 ? this.formatMinutes(timeToNextClass) : "")}&#8204;</p></div>
+                    }}><p>{(leastTimeToNextClass !== -1 ? this.formatMinutes(leastTimeToNextClass) : "")}&#8204;</p></div>
         else 
             return null;
     }
