@@ -46,21 +46,6 @@ class Editor extends React.Component {
                 fri = {timeSlot[9]}
                 sat = {timeSlot[10]}
             />);    
-
-        
-        var editor = (
-        <div>
-            {msg}
-            <div className="form-check form-switch">
-                <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
-                <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
-            </div>
-            <div className = "editors"><hr />{timeSlotEditors}</div>
-            <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
-            <hr/>
-            
-        </div>)
-   
             
         return (<div className = "Editor">
              <div className = "row">
@@ -76,10 +61,23 @@ class Editor extends React.Component {
              </div>
                 
             {!userInPWA && this.state.showAddToHomeScreen && this.props.schedule.length > 0 &&
-            <Message msg = {"show add to home screen"} handleHide = {this.handleHide} />
+                <Message msg = {"show add to home screen"} handleHide = {this.handleHide} />
             }
 
-            {this.state.editorActive ? editor : <hr/>} 
+            {this.state.editorActive ?
+                <div>
+                    {msg}
+                    <div className="form-check form-switch">
+                        <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
+                        <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
+                    </div>
+                    <div className = "editors"><hr />{timeSlotEditors}</div>
+                    <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
+                    <hr/>
+                    
+                    </div> 
+                : <hr/>
+            } 
             </div>);
     }
   
@@ -132,9 +130,8 @@ class Editor extends React.Component {
 
                     if (window.confirm("The end time of " + identifier + " is before the start time. Would you like to close the editor anyway?"))  {
                         this.setState({editorActive: false});
-                        return null;
-                    } else
-                        return null;
+                    } 
+                    return null;
                 } 
                 
                 
