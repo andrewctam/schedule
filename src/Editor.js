@@ -23,7 +23,7 @@ class Editor extends React.Component {
         if (this.props.link.length >= 2000)
             var msg = <Message msg = {"link too long"}/>
         else if (this.props.schedule.length > 0)
-            msg = <Message msg = {"schedule info"} userInPWA = {this.userInPWA} link = {this.props.link} weekly = {this.props.weekly}/>
+            msg = <Message msg = {"schedule info"} userInPWA = {userInPWA} link = {this.props.link} weekly = {this.props.weekly}/>
         else
             msg = <Message msg = {"schedule empty"}/>
             
