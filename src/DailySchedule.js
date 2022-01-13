@@ -15,9 +15,6 @@ class DailySchedule extends React.Component {
                 scheduleToday.push(this.props.schedule[j]);
             }
         }
-
-         
-
         if (scheduleToday.length > 0) {
             scheduleToday = this.sortTimeSlots(scheduleToday);
             var result = this.determineTimes(scheduleToday);
@@ -36,8 +33,13 @@ class DailySchedule extends React.Component {
             return (<div className = "example">
                         <h6>Click [Edit Schedule] above to add classes or click below to generate an example</h6>
                         <button className = "btn btn-primary example" 
-                        onClick = {() => this.props.generateExample()}>
-                        Generate Example Schedule</button>
+                            onClick = {() => this.props.generateExample()}>
+                            Generate Example Schedule</button>
+                            <hr/>
+                        <h6>If you are an SBU Student, you can copy and paste your schedule from your Shopping Cart in SOLAR. 
+                            <br/>Copy and paste your schedule from the bottom of the page.</h6>
+                        <input id = "SOLAR" className = "SOLAR" type="text" onChange = {this.handleChange}/>
+
                     </div>);        
         } else {
             return (<h1>No Classes Today</h1>);
@@ -122,8 +124,38 @@ class DailySchedule extends React.Component {
         time.setSeconds(0);
         return time;
     }
-    
 
+    handleChange = (e) => {
+        var inputStr = e.target.value;
+        var nextClassIndex = inputStr.search(/[A-Z]{3} [0-9]{3}-/);
+        var classes = []; //will hold classes substrings
+    
+        if (nextClassIndex === -1) {
+            alert("Error! No classes found.")
+            return;
+        }
+
+        inputStr = inputStr.substring(nextClassIndex)
+
+        while (nextClassIndex !== -1) {
+            //search for the NEXT class. Remove the first 8 chars (ABC 123-) so we don't find this current class
+            nextClassIndex = inputStr.substring(8).search(/[A-Z]{3} [0-9]{3}-/)
+            //if this is the last found class, since we can't find another class after this
+            if (nextClassIndex === -1) { 
+                classes.push(inputStr);
+                break;
+
+            } else {
+                //add the current class to classes and remove the info from the input string
+                //add 8 since we removed 8 chars from the search before 
+                classes.push(inputStr.substring(0, nextClassIndex + 8))
+                inputStr = inputStr.substring(nextClassIndex + 8);
+            }
+        }
+        console.log(classes)
+
+        
+    }
 
     componentDidMount() {
         var timeToNextMinute = 60000 - (new Date().getSeconds() * 1000);

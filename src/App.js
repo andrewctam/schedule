@@ -9,7 +9,7 @@ import { compressToBase64 } from "lz-string"
 class App extends React.Component {
     constructor(props) {
         super(props);
-        var scheduleFromLink = [];
+        var schedule = [];
         //Check to see if the link has parameters
         if (window.matchMedia('(display-mode: standalone)').matches) {
 
@@ -26,10 +26,9 @@ class App extends React.Component {
             link = link.substring(delim + 1);
         }
         
-        var savedSchedule = decompressFromBase64(link);
-        var weekly = true;
         if (delim !== -1) {
-            weekly = savedSchedule.substring(0, 1) === "1";
+            var savedSchedule = decompressFromBase64(link);
+            var weekly = savedSchedule.substring(0, 1) === "1";
             const timeSlots = savedSchedule.split('>');
             for (var i = 1; i < timeSlots.length; i++) {
                 var currentTimeSlot = timeSlots[i].split('<');
@@ -40,7 +39,7 @@ class App extends React.Component {
                     daysList[parseInt(currentTimeSlot[j])] = true;
                 }
                 
-                scheduleFromLink.push([ 
+                schedule.push([ 
                     currentTimeSlot[0],
                     currentTimeSlot[1],
                     currentTimeSlot[2],
@@ -55,10 +54,13 @@ class App extends React.Component {
                 ]);
 
             }
+        } else {
+            weekly = false;
         }
-        this.state = { schedule: scheduleFromLink, weekly: weekly, savedURL: link};
-
+            
+        this.state = { schedule: schedule, weekly: weekly, savedURL: link};
     }
+
     render() {
         var days = [1, 2, 3, 4, 5];
         for (var i = 0; i < this.state.schedule.length; i++) {
@@ -86,7 +88,8 @@ class App extends React.Component {
                 <DailySchedule schedule={this.state.schedule} generateExample = {this.exampleSchedule}/>
             }
         </div>
-        //schedule is {[name, startTime, endTime, link, sun ... sat], ...}
+        //schedule is {[name, startTime, endTime, link, sun ... sat], 
+        //             [name, startTime, endTime, link, sun ... sat] ...}
         );
     } 
     
