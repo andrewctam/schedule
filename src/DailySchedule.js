@@ -127,6 +127,8 @@ class DailySchedule extends React.Component {
 
     handleChange = (e) => {
         var inputStr = e.target.value;
+        //index of next class in string. Current class index will be 0. 
+        //inputStr = ABC 123- ... DEF 456- ... GHI 789-
         var nextClassIndex = inputStr.search(/[A-Z]{3} [0-9]{3}-/);
         var classes = []; //will hold classes substrings
     
@@ -134,7 +136,7 @@ class DailySchedule extends React.Component {
             alert("Error! No classes found.")
             return;
         }
-
+        // delete chars before the first class
         inputStr = inputStr.substring(nextClassIndex)
 
         while (nextClassIndex !== -1) {
@@ -152,11 +154,52 @@ class DailySchedule extends React.Component {
                 inputStr = inputStr.substring(nextClassIndex + 8);
             }
         }
-        console.log(classes)
-
+        this.props.updateEntireSchedule(this.classesStringToSchedule(classes));
         
     }
 
+    classesStringToSchedule(stringArray) {
+        var schedule = [];
+        var timeInfo, startTime, endTime, location, daysOfWeek;
+        for (var i = 0; i < stringArray.length; i++) {
+            timeInfo = stringArray[i].match(/[0-9]{1,2}:[0-9]{1,2}[AP]M - [0-9]{1,2}:[0-9]{1,2}[AP]M/)
+            if (timeInfo === null) {
+                startTime = "12:00AM";
+                endTime = "12:00AM";
+                location = "ONLINE";
+                daysOfWeek = "MoTuWeThFr"
+
+            } else {
+                startTime = this.AMPMto24H(timeInfo[0].substring(0, timeInfo[0].indexOf("-") - 1)) 
+                endTime = this.AMPMto24H(timeInfo[0].substring(timeInfo[0].indexOf("-") + 2)) 
+                location = stringArray[i].substring(timeInfo[0].length + timeInfo["index"], stringArray[i].search(/([A-Z]\. )|[Ss][Tt][Aa][Ff][Ff]/))
+                daysOfWeek = stringArray[i].match(/\) (Su|Mo|Tu|We|Th|Fr|Sa){1,5} /)
+            }
+
+            schedule.push([stringArray[i].substring(0, 7),
+                            startTime, 
+                            endTime, 
+                            location,
+                            daysOfWeek[0].includes("Su"),
+                            daysOfWeek[0].includes("Mo"),
+                            daysOfWeek[0].includes("Tu"),
+                            daysOfWeek[0].includes("We"),
+                            daysOfWeek[0].includes("Th"),
+                            daysOfWeek[0].includes("Fr"),
+                            daysOfWeek[0].includes("Sa")]); 
+        }
+        console.log(schedule);
+        return schedule;
+    }
+
+    AMPMto24H(str) {
+        var colon = str.indexOf(":");
+        var hrs = str.substring(0, colon) 
+        var mins = str.substring(colon + 1, str.indexOf("M") - 1)
+        if (str.includes("PM") && hrs < 12)
+            hrs = parseInt(hrs) + 12
+        return hrs + ":" + mins;  
+    }
     componentDidMount() {
         var timeToNextMinute = 60000 - (new Date().getSeconds() * 1000);
         this.waitUntilMinute = setInterval(() => this.repeatEveryMin(), timeToNextMinute);

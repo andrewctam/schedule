@@ -85,7 +85,7 @@ class App extends React.Component {
             {this.state.weekly ? 
                 <WeeklySchedule days = {days} schedule={this.state.schedule} generateExample = {this.exampleSchedule}/> 
                 : 
-                <DailySchedule schedule={this.state.schedule} generateExample = {this.exampleSchedule}/>
+                <DailySchedule schedule={this.state.schedule} updateEntireSchedule = {this.updateEntireSchedule}generateExample = {this.exampleSchedule}/>
             }
         </div>
         //schedule is {[name, startTime, endTime, link, sun ... sat], 
@@ -93,7 +93,9 @@ class App extends React.Component {
         );
     } 
     
-    
+    updateEntireSchedule = (updatedSchedule) => {
+        this.setState({schedule: updatedSchedule}, () => {this.saveSchedule()});
+    }
     updateTimeSlot = (timeSlot, i, newValue) => {
         var temp = this.state.schedule;
         temp[timeSlot][i] = newValue;
