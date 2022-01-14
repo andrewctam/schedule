@@ -6,8 +6,7 @@ class DailySchedule extends React.Component {
     forceScheduleUpdate = () => {this.forceUpdate();}   
     render() {               
         const today = new Date();   
-        var scheduleToday = [];
-        var scheduleToRender = [];
+        var scheduleToday = [];  
 
         //3 = sun, 4 = mon, 5 = tue, 6 = wed, 7 = thu, 8 = fri, 9 = sun
         for (var j = 0; j < this.props.schedule.length; j++) {
@@ -21,24 +20,26 @@ class DailySchedule extends React.Component {
             var classes = result[0]
             var timeToNextClass = result[1]
 
-            scheduleToRender = (scheduleToday.map((x, index) => 
+            scheduleToday = (scheduleToday.map((x, index) => 
                 <TimeSlot
                 key = {"ts" + index}
-                name = {x[0]}       info = {x[3]}
-                startTime = {x[1]}  endTime = {x[2]}
+                name = {x[0]}       
+                startTime = {x[1]}  
+                endTime = {x[2]}
+                info = {x[3]}
                 when = {classes[classes.length - 1 - index]}
                 />));
 
-        } else if (this.props.schedule.length === 0 ) {
+        } else if (this.props.schedule.length === 0) {
             return (<div className = "example">
                         <h6>Click [Edit Schedule] above to add classes or click below to generate an example</h6>
                         <button className = "btn btn-primary example" 
                             onClick = {() => this.props.generateExample()}>
                             Generate Example Schedule</button>
                             <hr/>
-                        <h6>If you are an SBU Student, you can copy and paste your schedule from your Shopping Cart in SOLAR. 
-                            <br/>Copy and paste your schedule from the bottom of the page.</h6>
-                        <input id = "SOLAR" className = "SOLAR" type="text" onChange = {this.handleChange}/>
+                        <h6>If you are an SBU Student, you can copy and paste your schedule from your SOLAR. 
+                            <br/>Go to SOLAR > Student Records & Registration > Academic Planning > Enrollment Shopping Cart and scroll down. Highlight and copy the entire table</h6>
+                        <input id = "SOLAR" className = "SOLAR" onChange = {this.handleChange} placeholder="Paste Here"/>
 
                     </div>);        
         } else {
@@ -48,7 +49,7 @@ class DailySchedule extends React.Component {
         
         return (<div>
                     <p>{this.formatMinutes(timeToNextClass)}</p>
-                    {scheduleToRender}
+                    {scheduleToday}
                 </div>); 
     }
     
@@ -133,7 +134,8 @@ class DailySchedule extends React.Component {
         var classes = []; //will hold classes substrings
     
         if (nextClassIndex === -1) {
-            alert("Error! No classes found.")
+            alert("No classes found. Make sure to copy the entire table.")
+            e.target.value = "";
             return;
         }
         // delete chars before the first class

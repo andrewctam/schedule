@@ -28,6 +28,7 @@ class Editor extends React.Component {
             msg = <Message msg = {"schedule empty"}/>
             
 
+        //convert the schedule into time slot editors
         var timeSlotEditors = this.props.schedule.map((timeSlot, index) => 
             <TimeSlotEditor
                 key = {"tse" + index}
@@ -67,10 +68,11 @@ class Editor extends React.Component {
             {this.state.editorActive ?
                 <div>
                     {msg}
+                    {this.props.schedule.length > 0 ?
                     <div className="form-check form-switch">
                         <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
                         <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
-                    </div>
+                    </div> : null}
                     <div className = "editors"><hr />{timeSlotEditors}</div>
                     <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
                     <hr/>
@@ -96,6 +98,7 @@ class Editor extends React.Component {
     }
 
     stringToDate = (str) => {
+        //hh:mm to Date object
         var hrs = str.substring(0, 2);
         var mins = str.substring(3, 5);
         var time = new Date();
@@ -105,8 +108,9 @@ class Editor extends React.Component {
         return time;
     }
     
-
+    //show/hide the editor when pressed and verify all the start times are before the end times
     toggleAndVerify = () => {
+
         if (this.state.editorActive)
             for (var i = 0; i < this.props.schedule.length; i++) {
                 if (this.stringToDate(this.props.schedule[i][2]) < this.stringToDate(this.props.schedule[i][1])) {
@@ -133,8 +137,7 @@ class Editor extends React.Component {
                     } 
                     return null;
                 } 
-                
-                
+    
             }
 
         this.setState({editorActive: !this.state.editorActive})
