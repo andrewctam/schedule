@@ -1,5 +1,5 @@
 import React from 'react';
-import TimeSlotEditor from './TimeSlotEditor.js'
+import ClassEditor from './ClassEditor.js'
 
 class Editor extends React.Component {
     constructor(props) {
@@ -29,12 +29,12 @@ class Editor extends React.Component {
             
 
         //convert the schedule into time slot editors
-        var timeSlotEditors = this.props.schedule.map((timeSlot, index) => 
-            <TimeSlotEditor
+        var individualEditors = this.props.schedule.map((timeSlot, index) => 
+            <ClassEditor
                 key = {"tse" + index}
                 id = {index}
-                updateSchedule={this.props.updateSchedule}
-                removeFromSchedule={this.props.removeFromSchedule}
+                updateClass={this.props.updateClass}
+                removeClass={this.props.removeClass}
                 name = {timeSlot[0]}
                 startTime = {timeSlot[1]}
                 endTime = {timeSlot[2]}
@@ -73,7 +73,7 @@ class Editor extends React.Component {
                         <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
                         <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
                     </div> : null}
-                    <div className = "editors"><hr />{timeSlotEditors}</div>
+                    <div className = "editors"><hr />{individualEditors}</div>
                     <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
                     <hr/>
                     
@@ -90,7 +90,7 @@ class Editor extends React.Component {
     
   
     handleAdd = (e) => {
-        this.props.addToSchedule();
+        this.props.addEmptyClass();
     }
 
     handleChecked = (e) => {
@@ -204,7 +204,6 @@ class Message extends React.Component {
                 return <p className = "editorInfo">{"Your schedule is currently empty. Click [Add Class] below to add a new class"}</p>;
             case ("schedule info"):
                 return (<div className = "editorInfo">
-                            <h1>Information</h1>
                             <ul>
                                 {
                                 this.props.userInPWA ? 
@@ -217,10 +216,6 @@ class Message extends React.Component {
                                 }
 
                                 <li><input className = "linkResult" inputMode = "none" onClick = {this.handleSelect} value = {this.props.link} /></li>
-                                <li><p>{(this.props.weekly ? " If you click on a block in the schedule, it will open a box at the top of the page with full information about the class. If the class has a link, clicking on this box will open the link in a new tab " :
-                                                            "If you click on a class and it has a link, the link will open in a new tab")}</p></li>
-                                <li><p>{(this.props.weekly ? " If you want your schedule to display earlier or later times, you can create an new class and set the start and end times to your desired times, but leave all the other inputs empty" :  
-                                                                "Classes will only show in the list on days that the class meets on.")}</p></li>
                             </ul>
                         </div>);
         }

@@ -1,9 +1,9 @@
 import React from 'react';
 
-class TimeSlotEditor extends React.Component {
+class ClassEditor extends React.Component {
     render() {
         return (
-            <div className="tsEditor">
+            <div className="classEditor">
                 <div className="row">
                     <div className="col-sm-6 name">
                         <input id = {this.props.id + ":0"} type = "text" onChange = {this.handleChange} value = {this.props.name} placeholder="Name"/>
@@ -39,17 +39,21 @@ class TimeSlotEditor extends React.Component {
     handleChange = (e) => {
         const element = e.target;
         if (!(element.value.includes(">") || element.value.includes("<")))
-            this.props.updateSchedule(this.props.id, parseInt(element.id.substring(element.id.indexOf(":") + 1)), element.value);
+            this.props.updateClass(this.props.id, 
+                parseInt(element.id.substring(element.id.indexOf(":") + 1)), 
+                element.value);
     }
 
     handleChecked = (e) => {
         const element = e.target;
-        this.props.updateSchedule(this.props.id, parseInt(element.id.substring(element.id.indexOf(":") + 1)), element.checked);
+        this.props.updateClass(this.props.id, 
+            parseInt(element.id.substring(element.id.indexOf(":") + 1)), 
+            element.checked);
     } 
     
     handleDelete = (e) => {
         if (window.confirm("Are you sure you want to delete this from your schedule?"))
-            this.props.removeFromSchedule(this.props.id);
+            this.props.removeClass(this.props.id);
     }
 
 }
@@ -63,4 +67,4 @@ class DateCheckBox extends React.Component {
     }
 }
 
-export default TimeSlotEditor;
+export default ClassEditor;

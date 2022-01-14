@@ -1,5 +1,6 @@
 import React from 'react';
 import TimeSlot from './TimeSlot.js';
+import QuickActions from './QuickActions.js';
 
 class WeeklySchedule extends React.Component {
     constructor(props) {
@@ -48,17 +49,14 @@ class WeeklySchedule extends React.Component {
 
         //create the hours 
         for (i = startHr; i <= endHr; i++) {
-            hours.push(<Hour time = {i} numOfDays = {this.props.days.length} />)
+            hours.push(<Hour time = {i} numOfDays = {this.props.days.length} />);
         }
 
         
         if (this.props.schedule.length === 0)
-            return (<div className = "example">
-                        <h6>Click [Edit Schedule] above to add classes or click below to generate an example</h6>
-                        <button className = "btn btn-primary example" 
-                        onClick = {() => this.props.generateExample()}>
-                        Generate Example Schedule</button>
-                    </div>)
+            return (<QuickActions 
+                generateExample = {this.props.generateExample}
+                updateEntireSchedule = {this.props.updateEntireSchedule}/>);
 
 
         var daysHeader = [<th scope="col"><p>Time</p></th>];

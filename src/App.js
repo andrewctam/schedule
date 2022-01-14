@@ -32,7 +32,7 @@ class App extends React.Component {
             const timeSlots = savedSchedule.split('>');
             for (var i = 1; i < timeSlots.length; i++) {
                 var currentTimeSlot = timeSlots[i].split('<');
-                //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
+                //name>startTime>endTime>example.com>0>1>2>3>4>5>6&
             
                 var daysList = [false, false, false, false, false, false, false];
                 for (var j = 4; j < currentTimeSlot.length; j++) {
@@ -55,16 +55,16 @@ class App extends React.Component {
 
             }
         } else {
-            weekly = false;
+            weekly = true;
         }
             
-        this.state = { schedule: schedule, weekly: weekly, savedURL: link};
+        this.state = { schedule: schedule, weekly: weekly, savedURL: link, deleted: []};
     }
 
     render() {
         var days = [1, 2, 3, 4, 5];
         for (var i = 0; i < this.state.schedule.length; i++) {
-            if (this.state.schedule[i][4] || this.state.schedule[i][10]) {
+            if (this.state.schedule[i][4] || this.state.schedule[i][10]) { //sat or sun
                 days = [0, 1, 2, 3, 4, 5, 6]
                 break;
             }
@@ -73,9 +73,9 @@ class App extends React.Component {
         return (
         <div>
             <Editor schedule={this.state.schedule} 
-            updateSchedule={this.updateTimeSlot} 
-            addToSchedule = {this.addTimeSlot}
-            removeFromSchedule = {this.removeTimeSlot}
+            updateClass={this.updateClass} 
+            addEmptyClass = {this.addEmptyClass}
+            removeClass = {this.removeClass}
             toggleWeekly = {this.toggleWeekly}
             weekly = {this.state.weekly}
             link = {"https://andrewtam.org/schedule/?" + this.state.savedURL}
@@ -83,9 +83,14 @@ class App extends React.Component {
             /> 
             
             {this.state.weekly ? 
-                <WeeklySchedule days = {days} schedule={this.state.schedule} generateExample = {this.exampleSchedule}/> 
+                <WeeklySchedule days = {days} 
+                schedule = {this.state.schedule} 
+                updateEntireSchedule = {this.updateEntireSchedule}
+                generateExample = {this.generateExample}/> 
                 : 
-                <DailySchedule schedule={this.state.schedule} updateEntireSchedule = {this.updateEntireSchedule}generateExample = {this.exampleSchedule}/>
+                <DailySchedule schedule = {this.state.schedule} 
+                updateEntireSchedule = {this.updateEntireSchedule}
+                generateExample = {this.generateExample}/>
             }
         </div>
         //schedule is {[name, startTime, endTime, link, sun ... sat], 
@@ -96,24 +101,38 @@ class App extends React.Component {
     updateEntireSchedule = (updatedSchedule) => {
         this.setState({schedule: updatedSchedule}, () => {this.saveSchedule()});
     }
-    updateTimeSlot = (timeSlot, i, newValue) => {
+
+    updateClass = (timeSlot, i, newValue) => {
         var temp = this.state.schedule;
         temp[timeSlot][i] = newValue;
         this.setState({schedule: temp}, () => {this.saveSchedule()});
     }
-    addTimeSlot = () => {
+    addEmptyClass = () => {
         var temp = this.state.schedule;
         temp.push(["","11:30","13:30","", false, false, false, false, false, false, false]);
         this.setState({schedule: temp}, () => {this.saveSchedule()});
     }
-    removeTimeSlot = (i) => {
-        var temp = this.state.schedule;
-        temp.splice(i, 1);
-        this.setState({schedule: temp}, () => {this.saveSchedule()});
+    removeClass = (i) => {
+        var tempSchedule = this.state.schedule;
+        var tempDeleted = this.state.deleted;
+        tempDeleted.push(tempSchedule.splice(i, 1)[0]);
+        this.setState({schedule: tempSchedule, delete: tempDeleted}, () => {this.saveSchedule()});
     }
     toggleWeekly = (e) => {
         var temp = !this.state.weekly;
         this.setState({weekly: temp}, () => {this.saveSchedule()});
+    }
+
+    generateExample = () => {
+        var temp = [
+            ["BIO 102", "10:15", "11:45", "Main Lecture Hall 102", false, true, false, true, false, true, false],
+            ["CSE 103", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false],
+            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false],
+            ["MUS 101", "08:30", "09:40", "Center of Arts 500",  false, true, false, true, false, false, false],
+            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, true, false, false, false],
+            ];
+
+        this.setState({schedule: temp}, () => {this.saveSchedule()});
     }
 
     saveSchedule = () => {
@@ -129,47 +148,29 @@ class App extends React.Component {
             strOutput += this.state.schedule[i][0] + "<" + this.state.schedule[i][1] + "<" + this.state.schedule[i][2] + "<" + this.state.schedule[i][3] + "<";
             for (var day = 0; day < 7; day++) {
                 if (this.state.schedule[i][day + 4])
-                strOutput += day + "<";
+                    strOutput += day + "<";
             }
 
-            if (i !== this.state.schedule.length - 1)
+            if (i !== this.state.schedule.length - 1) {
                 strOutput += ">";
             }
-
+        }
+        
+        var urlParams;
+        if (strOutput !== "") {
+            urlParams = compressToBase64(strOutput);
+        } else
+            urlParams = "";
             
-            var urlParams;
-            if (strOutput !== "") {
-                urlParams = compressToBase64(strOutput);
-            } else
-                urlParams = "";
-                
-            localStorage.setItem('savedURL', urlParams);
+        localStorage.setItem('savedURL', urlParams);
 
 
-            const url = new URL(window.location);
-            url.search = urlParams;
-            window.history.pushState({}, '', url);
+        const url = new URL(window.location);
+        url.search = urlParams;
+        window.history.pushState({}, '', url);
 
-            this.setState({savedURL: urlParams})
-            
-
-
-
+        this.setState({savedURL: urlParams})
     }
-
-    exampleSchedule = () => {
-        var temp = [
-            ["BIO 102", "10:15", "11:45", "Hall 102", false, true, false, true, false, true, false],
-            ["AMS 201", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false],
-            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false],
-            ["MUS 101", "08:30", "09:40", "https://zoom.us/...",  false, true, false, true, false, false, false],
-            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, false, false, false, false],
-            ];
-
-        this.setState({schedule: temp}, () => {this.saveSchedule()});
-    }
-
-    
 }
 
 
