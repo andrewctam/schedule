@@ -57,6 +57,7 @@ class App extends React.Component {
             }
         } else {
             weekly = true;
+            link  = "";
         }
             
         this.state = { schedule: schedule, weekly: weekly, savedURL: link, deleted: []};
@@ -80,6 +81,7 @@ class App extends React.Component {
             toggleWeekly = {this.toggleWeekly}
             weekly = {this.state.weekly}
             link = {"https://andrewtam.org/schedule/?" + this.state.savedURL}
+            updateURL = {this.updateURL}
 
             /> 
             
@@ -100,43 +102,54 @@ class App extends React.Component {
     } 
     
     updateEntireSchedule = (updatedSchedule) => {
-        this.setState({schedule: updatedSchedule}, () => {this.saveSchedule()});
+        this.setState({schedule: updatedSchedule}, () => {
+            this.saveSchedule(true); 
+        });
     }
 
     updateClass = (timeSlot, i, newValue) => {
         var temp = this.state.schedule;
         temp[timeSlot][i] = newValue;
-        this.setState({schedule: temp}, () => {this.saveSchedule()});
+        this.setState({schedule: temp}, () => {this.saveSchedule(false)});
     }
     addEmptyClass = () => {
         var temp = this.state.schedule;
-        temp.push(["","11:30","13:30","", false, false, false, false, false, false, false]);
-        this.setState({schedule: temp}, () => {this.saveSchedule()});
+        temp.push(["","11:30","13:30","", false, false, false, false, false, false, false, this.generateRandomColor()]);
+        this.setState({schedule: temp}, () => {this.saveSchedule(false)});
     }
+    
     removeClass = (i) => {
         var tempSchedule = this.state.schedule;
         var tempDeleted = this.state.deleted;
         tempDeleted.push(tempSchedule.splice(i, 1)[0]);
-        this.setState({schedule: tempSchedule, delete: tempDeleted}, () => {this.saveSchedule()});
+        this.setState({schedule: tempSchedule, delete: tempDeleted}, () => {this.saveSchedule(false)});
     }
     toggleWeekly = (e) => {
         var temp = !this.state.weekly;
-        this.setState({weekly: temp}, () => {this.saveSchedule()});
+        this.setState({weekly: temp}, () => {this.saveSchedule(false)});
     }
 
     generateExample = () => {
         var temp = [
-            ["BIO 102", "10:15", "11:45", "Main Lecture Hall 102", false, true, false, true, false, true, false, "#f7bee0"],
-            ["CSE 103", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false, "#32a852"],
-            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false, "#6589b5"],
-            ["MUS 101", "08:30", "09:40", "Center of Arts 500",  false, true, false, true, false, false, false, "#a87ae6"],
-            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, true, false, false, false, "#ed5fb2"],
+            ["BIO 102", "10:15", "11:45", "Main Lecture Hall 102", false, true, false, true, false, true, false, this.generateRandomColor()],
+            ["CSE 103", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false, this.generateRandomColor()],
+            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false, this.generateRandomColor()],
+            ["MUS 101", "08:30", "09:40", "Center of Arts 500",  false, true, false, true, false, false, false, this.generateRandomColor()],
+            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, true, false, false, false, this.generateRandomColor()],
             ];
 
-        this.setState({schedule: temp}, () => {this.saveSchedule()});
+        this.setState({schedule: temp}, () => {this.saveSchedule(false)});
+    }
+    generateRandomColor() {
+        var hexa = ["A", "B", "C", "D", "E", "F"]
+        var color = "#";
+        for (var i = 0; i < 6; i++) {
+            color += hexa[Math.floor(Math.random() * 6)];
+        }
+        return color;
     }
 
-    saveSchedule = () => {
+    saveSchedule = (updateURL) => {
         if (this.state.weekly)
             var strOutput = "1";
         else 
@@ -157,8 +170,7 @@ class App extends React.Component {
                 strOutput += ">";
             }
         }
-            
-        
+    
         var urlParams;
         if (strOutput !== "") {
             urlParams = compressToBase64(strOutput);
@@ -166,13 +178,20 @@ class App extends React.Component {
             urlParams = "";
             
         localStorage.setItem('savedURL', urlParams);
-
-
         const url = new URL(window.location);
         url.search = urlParams;
-        window.history.pushState({}, '', url);
+        
+        if (updateURL)
+            this.setState({savedURL: urlParams}, () => {this.updateURL()})
+        else
+            this.setState({savedURL: urlParams})
 
-        this.setState({savedURL: urlParams})
+    }
+
+    updateURL = () => {
+        const url = new URL(window.location);
+        url.search = this.state.savedURL;
+        window.history.pushState({}, '', url);   
     }
 }
 

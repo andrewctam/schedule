@@ -27,7 +27,6 @@ class Editor extends React.Component {
         else
             msg = <Message msg = {"schedule empty"}/>
             
-        console.log(this.props.schedule)
         //convert the schedule into time slot editors
         var individualEditors = this.props.schedule.map((timeSlot, index) => 
             <ClassEditor
@@ -57,7 +56,7 @@ class Editor extends React.Component {
                 <div className = "col-sm-6 editSchedule">
                     <button type = "button" className = "btn btn-secondary" 
                         onClick = {this.toggleAndVerify}>
-                        {this.state.editorActive ? "Close Editor" : "Edit Schedule"}  
+                        {this.state.editorActive ? "Save and Close Editor" : "Edit Schedule"}  
                     </button>
                 </div>
              </div>
@@ -135,13 +134,17 @@ class Editor extends React.Component {
 
                     if (window.confirm("The end time of " + identifier + " is before the start time. Would you like to close the editor anyway?"))  {
                         this.setState({editorActive: false});
+                        this.props.updateURL();
                     } 
-                    return null;
+                    else 
+                        return null;
                 } 
     
             }
-
+        if (this.state.editorActive)
+            this.props.updateURL();
         this.setState({editorActive: !this.state.editorActive})
+        
 
     }
 
@@ -209,12 +212,14 @@ class Message extends React.Component {
                                 {
                                 this.props.userInPWA ? 
                                 <li style = {{backgroundColor: "rgb(255, 200, 200)"}}>
-                                    <p>{"WARNING: Your schedule and any new edits are automatically saved, but if you clear your browser's history/cookies, any changes to your schedule made after you first added the app may be deleted."}</p>
-                                    <p>{"To guarantee that your changes are not deleted: once you finish your edits, go to the link below in your web browser and re-add this app to the home screen (and you can delete the old one)."}</p>
+                                    {"To guarantee that your changes are not deleted: once you finish your edits, go to the link below in your web browser and re-add this app to the home screen (and you can delete the old one)."}
                                 </li>
-                                :
-                                <li><p>{"You can save your schedule by bookmarking this page (or save it directly to your home screen on your mobile device, which will make it an app) or by copying and saving the link below (same as link in address bar)"}</p></li>
-                                }
+
+                                :<div>
+                                <li>{"To discard your changes, refresh the page."}</li>
+                                <li>{"To save your schedule, click Save and Close Editor and bookmark/favorite this page"}</li>
+                                <li>{"You can also save your schedule by copying this URL:"}</li>
+                                </div>}
         
                                 <li><input className = "linkResult" inputMode = "none" onClick = {this.handleSelect} value = {this.props.link} /></li>
                             </ul>

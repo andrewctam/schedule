@@ -46,6 +46,7 @@ class QuickActions extends React.Component {
         }
         this.props.updateEntireSchedule(this.classesStringToSchedule(classes));
         
+        
     }
 
     classesStringToSchedule(stringArray) {
@@ -76,9 +77,9 @@ class QuickActions extends React.Component {
                             daysOfWeek[0].includes("We"),
                             daysOfWeek[0].includes("Th"),
                             daysOfWeek[0].includes("Fr"),
-                            daysOfWeek[0].includes("Sa")]); 
+                            daysOfWeek[0].includes("Sa"),
+                            this.generateRandomColor()]); 
         }
-        console.log(schedule);
         return schedule;
     }
 
@@ -89,6 +90,15 @@ class QuickActions extends React.Component {
         if (str.includes("PM") && hrs < 12)
             hrs = parseInt(hrs) + 12
         return hrs + ":" + mins;  
+    }
+
+    generateRandomColor() {
+        var letters = ["A", "B", "C", "D", "E", "F"]
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 6)];
+        }
+        return color;
     }
 }
 
