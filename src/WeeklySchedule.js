@@ -39,6 +39,8 @@ class WeeklySchedule extends React.Component {
                             height: lengthInMins + "px",
                             top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px",
                             left: (100 / (this.props.days.length + 1)) * (j + 1) + (0) + "%",
+                            backgroundColor: this.props.schedule[i][11],
+                            color: this.darkOrWhiteText(this.props.schedule[i][11]),
                         }}>
                             
                         <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][0]}</p>
@@ -107,6 +109,14 @@ class WeeklySchedule extends React.Component {
             />
         })
 
+
+    }
+    darkOrWhiteText(bkColor) { //#123456
+        var brightness = Math.round((
+                    (Number("0x" + bkColor.substring(1, 3)) * 299) +
+                    (Number("0x" + bkColor.substring(3, 5)) * 587) +
+                    (Number("0x" + bkColor.substring(5)) * 114)) / 1000);
+        return (brightness > 125) ? 'black' : 'white';
 
     }
     

@@ -32,10 +32,10 @@ class App extends React.Component {
             const timeSlots = savedSchedule.split('>');
             for (var i = 1; i < timeSlots.length; i++) {
                 var currentTimeSlot = timeSlots[i].split('<');
-                //name>startTime>endTime>example.com>0>1>2>3>4>5>6&
+                //name>startTime>endTime>example.com>0>1>2>3>4>5>6>color&
             
                 var daysList = [false, false, false, false, false, false, false];
-                for (var j = 4; j < currentTimeSlot.length; j++) {
+                for (var j = 4; j < currentTimeSlot.length - 1; j++) {
                     daysList[parseInt(currentTimeSlot[j])] = true;
                 }
                 
@@ -50,7 +50,8 @@ class App extends React.Component {
                     daysList[3],
                     daysList[4],
                     daysList[5],
-                    daysList[6]
+                    daysList[6],
+                    currentTimeSlot[currentTimeSlot.length - 1]
                 ]);
 
             }
@@ -93,8 +94,8 @@ class App extends React.Component {
                 generateExample = {this.generateExample}/>
             }
         </div>
-        //schedule is {[name, startTime, endTime, link, sun ... sat], 
-        //             [name, startTime, endTime, link, sun ... sat] ...}
+        //schedule is {[name, startTime, endTime, link, sun, ..., sat, color], 
+        //             [name, startTime, endTime, link, sun, ..., sat, color] ...}
         );
     } 
     
@@ -125,11 +126,11 @@ class App extends React.Component {
 
     generateExample = () => {
         var temp = [
-            ["BIO 102", "10:15", "11:45", "Main Lecture Hall 102", false, true, false, true, false, true, false],
-            ["CSE 103", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false],
-            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false],
-            ["MUS 101", "08:30", "09:40", "Center of Arts 500",  false, true, false, true, false, false, false],
-            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, true, false, false, false],
+            ["BIO 102", "10:15", "11:45", "Main Lecture Hall 102", false, true, false, true, false, true, false, "#f7bee0"],
+            ["CSE 103", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false, "#32a852"],
+            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false, "#6589b5"],
+            ["MUS 101", "08:30", "09:40", "Center of Arts 500",  false, true, false, true, false, false, false, "#a87ae6"],
+            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, true, false, false, false, "#ed5fb2"],
             ];
 
         this.setState({schedule: temp}, () => {this.saveSchedule()});
@@ -151,10 +152,12 @@ class App extends React.Component {
                     strOutput += day + "<";
             }
 
+            strOutput += this.state.schedule[i][11];
             if (i !== this.state.schedule.length - 1) {
                 strOutput += ">";
             }
         }
+            
         
         var urlParams;
         if (strOutput !== "") {

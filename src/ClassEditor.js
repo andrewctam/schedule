@@ -31,7 +31,15 @@ class ClassEditor extends React.Component {
                         <DateCheckBox htmlID ={this.props.id + ":10"} dateBool = {this.props.sat} date = "Sat" handleChecked = {this.handleChecked}/>
                     </div>
                 </div>
-                <button className = "btn btn-danger btn-sm delete" onClick = {this.handleDelete}>Delete From Schedule</button>
+
+                <div className="row">
+                    <div className="col-sm-6 colorAdjust">
+                         <input id ={this.props.id + ":11"} type = "color" className = "colorAdjuster" onChange = {this.handleChange} defaultValue = {this.props.weeklyColor} />
+                    </div>
+                        <div className="col-sm-6 delete">
+                        <button className = "btn btn-danger btn-sm" onClick = {this.handleDelete}>Delete From Schedule</button>
+                    </div>
+                </div>
             </div>
         );
     }

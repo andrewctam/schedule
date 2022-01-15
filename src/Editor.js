@@ -27,7 +27,7 @@ class Editor extends React.Component {
         else
             msg = <Message msg = {"schedule empty"}/>
             
-
+        console.log(this.props.schedule)
         //convert the schedule into time slot editors
         var individualEditors = this.props.schedule.map((timeSlot, index) => 
             <ClassEditor
@@ -46,6 +46,7 @@ class Editor extends React.Component {
                 thu = {timeSlot[8]}
                 fri = {timeSlot[9]}
                 sat = {timeSlot[10]}
+                weeklyColor = {timeSlot[11]}
             />);    
             
         return (<div className = "Editor">
