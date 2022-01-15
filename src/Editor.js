@@ -73,7 +73,7 @@ class Editor extends React.Component {
                         <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
                         <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
                     </div> : null}
-                    <div className = "editors"><hr />{individualEditors}</div>
+                    <div className = "editors">{individualEditors}</div>
                     <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
                     <hr/>
                     
@@ -201,7 +201,7 @@ class Message extends React.Component {
             case ("link too long"):
                 return <p className = "editorInfo">{"Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
             case ("schedule empty"):
-                return <p className = "editorInfo">{"Your schedule is currently empty. Click [Add Class] below to add a new class"}</p>;
+                return <p className = "editorInfo">{"Your schedule is currently empty. Click Add Class below to add a new class"}</p>;
             case ("schedule info"):
                 return (<div className = "editorInfo">
                             <ul>
@@ -214,10 +214,12 @@ class Message extends React.Component {
                                 :
                                 <li><p>{"You can save your schedule by bookmarking this page (or save it directly to your home screen on your mobile device, which will make it an app) or by copying and saving the link below (same as link in address bar)"}</p></li>
                                 }
-
+        
                                 <li><input className = "linkResult" inputMode = "none" onClick = {this.handleSelect} value = {this.props.link} /></li>
                             </ul>
                         </div>);
+            default:
+                return null;
         }
     }
     handleSelect = (e) => {

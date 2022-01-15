@@ -15,6 +15,7 @@ class DailySchedule extends React.Component {
                 scheduleToday.push(this.props.schedule[j]);
             }
         }
+
         if (scheduleToday.length > 0) {
             scheduleToday = this.sortTimeSlots(scheduleToday);
             var result = this.determineTimes(scheduleToday);
@@ -29,7 +30,7 @@ class DailySchedule extends React.Component {
                 endTime = {x[2]}
                 info = {x[3]}
                 when = {classes[classes.length - 1 - index]}
-                />));
+            />));
 
         } else if (this.props.schedule.length === 0) {
             return (<QuickActions 
@@ -49,6 +50,7 @@ class DailySchedule extends React.Component {
     formatMinutes = (num) => {
         if (isNaN(num) || num === -1) 
             return "";
+
         var mins = Math.ceil(num);
         var hrs = Math.floor(mins / 60);
         mins = mins % 60;
