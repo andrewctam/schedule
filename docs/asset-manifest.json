@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/schedule/static/js/main.cd4ebedb.js",
+    "main.js": "/schedule/static/js/main.a522237f.js",
     "service-worker.js": "/schedule/service-worker.js",
     "index.html": "/schedule/index.html",
-    "main.cd4ebedb.js.map": "/schedule/static/js/main.cd4ebedb.js.map"
+    "main.a522237f.js.map": "/schedule/static/js/main.a522237f.js.map"
   },
   "entrypoints": [
-    "static/js/main.cd4ebedb.js"
+    "static/js/main.a522237f.js"
   ]
 }

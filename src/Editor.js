@@ -197,7 +197,7 @@ class Message extends React.Component {
     render() {
         switch (this.props.msg) {
             case ("show add to home screen"):
-                return <div style = {{backgroundColor: "rgb(255, 200, 200)"}} className = "row editorInfo">
+                return <div style = {{backgroundColor: "rgb(255, 200, 200)", color: "black"}} className = "row editorInfo">
                         <p>{"You can save this app to your mobile device's homescreen and save it as an app, allowing this app to work offline and be accessed in the app switcher."}</p> 
                         <ul><li>On iOS on Safari, click the Share icon (box with up arrow) and select Add To Home Screen.</li>
                         <li>On Android on Chrome, open the three dots menu and select Add To Home Screen.</li>
@@ -212,7 +212,7 @@ class Message extends React.Component {
                             <ul>
                                 {
                                 this.props.userInPWA ? 
-                                <li style = {{backgroundColor: "rgb(255, 200, 200)"}}>
+                                <li>
                                     {"To guarantee that your changes are not deleted: once you finish your edits, go to the link below in your web browser and re-add this app to the home screen (and you can delete the old one)."}
                                 </li>
 
