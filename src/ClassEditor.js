@@ -34,7 +34,7 @@ class ClassEditor extends React.Component {
 
                 <div className="row">
                     <div className="col-sm-6 colorAdjust">
-                         <input id ={this.props.id + ":11"} type = "color" className = "colorAdjuster" onChange = {this.handleChange} defaultValue = {this.props.weeklyColor} />
+                         <input id ={this.props.id + ":11"} type = "color" className = "colorAdjuster" onChange = {this.handleChange} value = {this.props.weeklyColor} />
                     </div>
                         <div className="col-sm-6 delete">
                         <button className = "btn btn-danger btn-sm" onClick = {this.handleDelete}>Delete From Schedule</button>

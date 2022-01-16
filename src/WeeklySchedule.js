@@ -177,11 +177,11 @@ class CurrentTime extends React.Component {
         }
 
         if (this.props.days.indexOf(new Date().getDay()) !== -1 && now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr + 1))
-            return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
+            return <tbody id = "currentTime" className = "line" onClick = {this.handleClick} style = {
                     {
                         top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 - 28 + "px",
                         left: (date * (100 / (this.props.days.length + 1))) + "%",
-                    }}><p>{(leastTimeToNextClass !== -1 ? this.formatMinutes(leastTimeToNextClass) : "")}&#8204;</p></div>
+                    }}><p>{(leastTimeToNextClass !== -1 ? this.formatMinutes(leastTimeToNextClass) : "")}&#8204;</p></tbody>
         else 
             return null;
     }

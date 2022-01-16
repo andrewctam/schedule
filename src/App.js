@@ -27,33 +27,38 @@ class App extends React.Component {
         }
         
         if (delim !== -1) {
-            var savedSchedule = decompressFromBase64(link);
-            var weekly = savedSchedule.substring(0, 1) === "1";
-            const timeSlots = savedSchedule.split('>');
-            for (var i = 1; i < timeSlots.length; i++) {
-                var currentTimeSlot = timeSlots[i].split('<');
-                //name>startTime>endTime>example.com>0>1>2>3>4>5>6>color&
-            
-                var daysList = [false, false, false, false, false, false, false];
-                for (var j = 4; j < currentTimeSlot.length - 1; j++) {
-                    daysList[parseInt(currentTimeSlot[j])] = true;
-                }
+            try {
+                var savedSchedule = decompressFromBase64(link);
+                var weekly = savedSchedule.substring(0, 1) === "1";
+                const timeSlots = savedSchedule.split('>');
+                for (var i = 1; i < timeSlots.length; i++) {
+                    var currentTimeSlot = timeSlots[i].split('<');
+                    //name>startTime>endTime>example.com>0>1>2>3>4>5>6>color&
                 
-                schedule.push([ 
-                    currentTimeSlot[0],
-                    currentTimeSlot[1],
-                    currentTimeSlot[2],
-                    currentTimeSlot[3],
-                    daysList[0],
-                    daysList[1],
-                    daysList[2],
-                    daysList[3],
-                    daysList[4],
-                    daysList[5],
-                    daysList[6],
-                    currentTimeSlot[currentTimeSlot.length - 1]
-                ]);
+                    var daysList = [false, false, false, false, false, false, false];
+                    for (var j = 4; j < currentTimeSlot.length - 1; j++) {
+                        daysList[parseInt(currentTimeSlot[j])] = true;
+                    }
+                    
+                    schedule.push([ 
+                        currentTimeSlot[0],
+                        currentTimeSlot[1],
+                        currentTimeSlot[2],
+                        currentTimeSlot[3],
+                        daysList[0],
+                        daysList[1],
+                        daysList[2],
+                        daysList[3],
+                        daysList[4],
+                        daysList[5],
+                        daysList[6],
+                        currentTimeSlot[currentTimeSlot.length - 1]
+                    ]);
 
+                }
+            } catch (error) {
+                console.log("Schedule saved to URL is invalid or outdated")
+                this.state = { schedule: [], weekly: true, savedURL: "", deleted: [] };    
             }
         } else {
             weekly = true;
@@ -82,6 +87,7 @@ class App extends React.Component {
             weekly = {this.state.weekly}
             link = {"https://andrewtam.org/schedule/?" + this.state.savedURL}
             updateURL = {this.updateURL}
+            randomizeColors={this.randomizeColors}
 
             /> 
             
@@ -96,10 +102,17 @@ class App extends React.Component {
                 generateExample = {this.generateExample}/>
             }
         </div>
-        //schedule is {[name, startTime, endTime, link, sun, ..., sat, color], 
+        //schedule is {[name, startTime, endTime, link, sun (bool), ..., sat, color], 
         //             [name, startTime, endTime, link, sun, ..., sat, color] ...}
         );
     } 
+    randomizeColors = () => {
+        var temp = this.state.schedule;
+        for (var i = 0; i < temp.length; i++) {
+            temp[i][11] = this.generateRandomColor();
+        }
+        this.setState({schedule: temp}, () => {this.saveSchedule(false)});;
+    }
     
     updateEntireSchedule = (updatedSchedule) => {
         this.setState({schedule: updatedSchedule}, () => {
