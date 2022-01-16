@@ -111,7 +111,7 @@ class App extends React.Component {
         for (var i = 0; i < temp.length; i++) {
             temp[i][11] = this.generateRandomColor();
         }
-        this.setState({schedule: temp}, () => {this.saveSchedule(false)});;
+        this.setState({schedule: temp},() => {this.saveSchedule(false)});;
     }
     
     updateEntireSchedule = (updatedSchedule) => {
@@ -184,27 +184,24 @@ class App extends React.Component {
             }
         }
     
-        var urlParams;
+        var compressed;
         if (strOutput !== "") {
-            urlParams = compressToBase64(strOutput);
+            compressed = compressToBase64(strOutput);
         } else
-            urlParams = "";
+            compressed = "";
             
-        localStorage.setItem('savedURL', urlParams);
-        const url = new URL(window.location);
-        url.search = urlParams;
-        
+            
         if (updateURL)
-            this.setState({savedURL: urlParams}, () => {this.updateURL()})
+            this.setState({savedURL: compressed}, () => {this.updateURL()})
         else
-            this.setState({savedURL: urlParams})
-
-    }
+            this.setState({savedURL: compressed})
+    }       
 
     updateURL = () => {
         const url = new URL(window.location);
         url.search = this.state.savedURL;
         window.history.pushState({}, '', url);   
+        localStorage.setItem('savedURL', this.state.savedURL);
     }
 }
 

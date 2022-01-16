@@ -108,27 +108,21 @@
     border: 1px solid black;
   }
 
-  .btn-danger {
+  .btn-danger, .btn-danger:focus, .btn-danger:hover {
     background-color: rgb(237, 214, 214);
     color: black;
     border: none;
     height: 100%;
   }
-  .btn-danger:hover {
-    background-color: rgb(238, 135, 135);
-    color:black;
-  }
-  .btn-primary {
+  
+  .btn-primary, .btn-primary:hover, .btn-primary:focus {
     margin-top: 3vh;
     background-color: rgba(94, 197, 245, 0.5);
     color: black;
     border: 1px solid black;
   }
-  .btn-primary:hover, .btn-primary:focus {
-    background-color: rgba(94, 197, 245, 0.5);
-    color: black;
-  }
-  .btn-secondary {
+
+  .btn-secondary, .btn-secondary:hover, .btn-secondary:focus {
   border: 1px solid black;
   background-color: rgb(255, 255, 255);
   color: black;
@@ -473,30 +467,26 @@
     border: 1px solid gray;
   }
 
-  .btn-danger {
+  .btn-danger, .btn-danger:focus, .btn-danger:hover {
     background-color: rgb(163, 82, 82);
     color: white;
     border: none;
     height: 100%;
   }
 
-  .btn-primary {
+  .btn-primary, .btn-primary:hover, .btn-primary:focus {
     margin-top: 3vh;
     background-color: rgba(142, 190, 212, 0.5);
     color: white;
   }
-  .btn-primary:hover, .btn-primary:focus {
-    background-color: rgba(142, 190, 212, 0.5);
-    color: white;
-  }
 
-  .btn-secondary {
+  .btn-secondary, .btn-secondary:hover, .btn-secondary:focus {
     border: 1px solid gray;
     background-color: rgb(44, 43, 43);
     color: white;
   }
+  
   @media (min-width: 576px) {
-
     .clock {
       border-right: none;
     }
@@ -670,19 +660,16 @@
   }
 
 
+  th > p, td > p, tr > p, .line {
+    color: white;
+  }
   @media (max-width: 700px) {
-    th > p, td > p, tr > p, .line {
-      color: white;
-    }
     .block, .block > p, th > p, td > p, tr > p, .line {
       font-size: 1.5vw;
     }
   }
 
   @media (max-width: 576px) {
-    th > p, td > p, tr > p, .line {
-      color: white;
-    }
     .block, .block > p, th > p, td > p, tr > p, .line {
       font-size: 2.5vw;
     }
@@ -758,7 +745,11 @@
     width: 50%;
     margin-left: 25%;
     margin-right: 25%;
-    background-color: white;
+    color: white;
+    background-color: rgba(142, 190, 212, 0.5);
+  }
+  .SOLAR::placeholder, input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
   }
 
 
