@@ -69,12 +69,15 @@ class Editor extends React.Component {
                 <div>
                     {msg}
                     {this.props.schedule.length > 0 ?
-                    <div className="form-check form-switch">
-                        <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
-                        <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
+                    <div>
+                        <div className="form-check form-switch">
+                            <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
+                            <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
+                        </div>
                     </div> : null}
                     <div className = "editors">{individualEditors}</div>
                     <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
+                    {this.props.weekly && this.props.schedule.length > 0 ? <button className = "btn btn-primary" onClick={this.props.randomizeColors}>Randomize Colors</button> : null }
                     <hr/>
                     
                     </div> 
@@ -111,6 +114,7 @@ class Editor extends React.Component {
     //show/hide the editor when pressed and verify all the start times are before the end times
     toggleAndVerify = () => {
         if (this.state.editorActive) {
+            console.log(this.props.schedule);
             if (this.props.link.length >= 2000) {
                 alert("Your schedule is too large. Try to reduce link sizes.");
                 return null;
@@ -172,7 +176,6 @@ class Clock extends React.Component {
                 {date + " - " + hrs + ":" + mins + " " + meridian}
                 </button>);   
     }
-
     componentDidMount() {
         this.waitForNextSecond = setInterval(() => 
         this.repeatEverySecond(), 
@@ -222,7 +225,7 @@ class Message extends React.Component {
                                 <li>{"You can also save your schedule by copying this URL:"}</li>
                                 </div>}
         
-                                <li><input className = "linkResult" inputMode = "none" onClick = {this.handleSelect} value = {this.props.link} /></li>
+                                <li><input className = "linkResult" inputMode = "none" onClick = {this.handleSelect} value = {this.props.link} readOnly = {true} /></li>
                             </ul>
                         </div>);
             default:
