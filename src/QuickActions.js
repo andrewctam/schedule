@@ -4,7 +4,7 @@ class QuickActions extends React.Component {
     render() {
         return <div className = "quickActions">
             <h6>Click Edit Schedule above to add classes or click below to generate an example</h6>
-            <button className = "btn btn-primary SOLAR" 
+            <button className = "btn btn-primary example" 
                 onClick = {() => this.props.generateExample()}>
                 Generate Example Schedule</button>
                 <hr/>
