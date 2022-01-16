@@ -69,7 +69,6 @@ class WeeklySchedule extends React.Component {
 
         return (<div>
             <div className = "weekly">
-                {this.state.timeSlot}
                 <table className = "table" >
                     <thead onClick = {() => this.setState({timeSlot: null})} >
                         <tr>{daysHeader}</tr>
@@ -83,6 +82,7 @@ class WeeklySchedule extends React.Component {
                     <CurrentTime key = "currentTime" days = {this.props.days} schedule = {this.props.schedule} startHr = {startHr} endHr = {endHr} />
                 </table>
                 </div>
+                {this.state.timeSlot}
             </div>
         );
     }

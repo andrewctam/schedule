@@ -110,16 +110,19 @@ h1 {
   background-color: rgb(237, 214, 214);
   color: black;
   border: none;
+  height: 100%;
 }
 .btn-primary {
   margin-top: 3vh;
-  background-color: rgba(72, 238, 86, 0.5);
+  background-color: rgba(94, 197, 245, 0.5);
   color: black;
+  border: 1px solid black;
 }
 .btn-primary:hover {
-  background-color: rgb(72, 238, 86);
+  background-color: rgba(94, 197, 245, 0.5);
   color: black;
 }
+
 .btn-info {
   width: 100%;
   height: 100%;
@@ -189,18 +192,30 @@ h1 {
   border-right: none;
 }
 
+
 .colorAdjust {
   border-top: 1px solid black;
   border-bottom: none;
   border-left: none;
-  border-right: 1px solid black
+  border-right: 1px solid black;
  
 
 }
-.colorAdjuster {
-  height: 100%;
-  width: 100%;
-  padding: 0;
+
+@supports not (-webkit-touch-callout: none) {
+  .colorAdjuster {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+  }
+}
+
+@supports  (-webkit-touch-callout: none) {
+  .colorAdjuster {
+  margin-top: 5px;
+  margin-bottom:5px;
+  margin-left: 46.5%;
+  }
 }
 .checks {
   text-align: center;
@@ -247,7 +262,6 @@ table {
 
 td, th {
   width: var(--numDays);
-  font-size: 2.5vh;
   border: 1px solid black;
   text-align: center;
   padding: 0;
@@ -261,13 +275,14 @@ th {
   text-overflow: clip;
 }
 td {
-  border: 1px dotted rgba(128, 128, 128);
+  border: 1px solid rgba(128, 128, 128, 0.5);
 }
 
 
-
-.block, .block > p, th > p, td > p, tr > p, .line {
-  font-size: 1.5vw;
+@media (max-width: 700px) {
+  .block, .block > p, th > p, td > p, tr > p, .line {
+    font-size: 1.5vw;
+  }
 }
 
 @media (max-width: 576px) {
@@ -338,11 +353,7 @@ th > p, td > p, tr > p {
   margin-left: 15%;
   margin-right: 15%;
 }
-.example > button {
-  width: 50%;
-  margin-left: 25%;
-  margin-right: 25%;
-}
+
 
 .SOLAR {
   border:1px solid black;

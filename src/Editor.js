@@ -64,7 +64,7 @@ class Editor extends React.Component {
             {!userInPWA && this.state.showAddToHomeScreen && this.props.schedule.length > 0 &&
                 <Message msg = {"show add to home screen"} handleHide = {this.handleHide} />
             }
-
+        
             {this.state.editorActive ?
                 <div>
                     {msg}
@@ -110,8 +110,12 @@ class Editor extends React.Component {
     
     //show/hide the editor when pressed and verify all the start times are before the end times
     toggleAndVerify = () => {
+        if (this.state.editorActive) {
+            if (this.props.link.length >= 2000) {
+                alert("Your schedule is too large. Try to reduce link sizes.");
+                return null;
+            }
 
-        if (this.state.editorActive)
             for (var i = 0; i < this.props.schedule.length; i++) {
                 if (this.stringToDate(this.props.schedule[i][2]) < this.stringToDate(this.props.schedule[i][1])) {
                     if (this.props.schedule[i][0] === "") 
@@ -132,19 +136,16 @@ class Editor extends React.Component {
                     else
                         identifier = this.props.schedule[i][0];
 
-                    if (window.confirm("The end time of " + identifier + " is before the start time. Would you like to close the editor anyway?"))  {
-                        this.setState({editorActive: false});
-                        this.props.updateURL();
-                    } 
-                    else 
+                    if (!window.confirm("The end time of " + identifier + " is before the start time. Would you like to close the editor anyway?"))  { 
                         return null;
-                } 
-    
-            }
-        if (this.state.editorActive)
+                    } 
+
+                }
+            }  
             this.props.updateURL();
-        this.setState({editorActive: !this.state.editorActive})
-        
+            this.setState({editorActive: false});
+        } else 
+            this.setState({editorActive: true});
 
     }
 
@@ -203,7 +204,7 @@ class Message extends React.Component {
                         </ul>
                         <button className = "btn btn-light" onClick = {this.props.handleHide}>Close Message</button></div>
             case ("link too long"):
-                return <p className = "editorInfo">{"Warning: The schedule link is too big (>2000 chars). If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
+                return <p className = "editorInfo">{"Warning: Your schedule is too large to be saved. If you have links, try using a link shortener like bit.ly to shorten the links"}</p>;
             case ("schedule empty"):
                 return <p className = "editorInfo">{"Your schedule is currently empty. Click Add Class below to add a new class"}</p>;
             case ("schedule info"):
