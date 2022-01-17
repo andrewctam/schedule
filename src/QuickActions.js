@@ -55,16 +55,16 @@ class QuickActions extends React.Component {
         for (var i = 0; i < stringArray.length; i++) {
             timeInfo = stringArray[i].match(/[0-9]{1,2}:[0-9]{1,2}[AP]M - [0-9]{1,2}:[0-9]{1,2}[AP]M/)
             if (timeInfo === null) {
-                startTime = "12:00AM";
-                endTime = "12:00AM";
+                startTime = "";
+                endTime = "";
                 location = "ONLINE";
-                daysOfWeek = "MoTuWeThFr"
+                daysOfWeek = [""]; 
 
             } else {
                 startTime = this.AMPMto24H(timeInfo[0].substring(0, timeInfo[0].indexOf("-") - 1)) 
                 endTime = this.AMPMto24H(timeInfo[0].substring(timeInfo[0].indexOf("-") + 2)) 
                 location = stringArray[i].substring(timeInfo[0].length + timeInfo["index"], stringArray[i].search(/([A-Z]\. )|[Ss][Tt][Aa][Ff][Ff]/))
-                daysOfWeek = stringArray[i].match(/\) (Su|Mo|Tu|We|Th|Fr|Sa){1,5} /)
+                daysOfWeek = stringArray[i].match(/\) (Su|Mo|Tu|We|Th|Fr|Sa){1,7} /)
             }
 
             schedule.push([stringArray[i].substring(0, 7),
