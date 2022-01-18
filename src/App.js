@@ -4,7 +4,7 @@ import DailySchedule from './DailySchedule.js';
 import WeeklySchedule from './WeeklySchedule.js';
 import { decompressFromBase64 } from "lz-string"
 import { compressToBase64 } from "lz-string"
-
+import "./styles.css"
 
 class App extends React.Component {
     constructor(props) {

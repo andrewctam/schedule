@@ -9,7 +9,7 @@ class QuickActions extends React.Component {
                 Generate Example Schedule</button>
                 <hr/>
             <h6>If you are a Stony Brook student, you can copy and paste your schedule from your SOLAR. 
-                <br/>{"Go to SOLAR > Student Records & Registration > Academic Planning > Enrollment Shopping Cart and scroll down. Highlight and copy the entire table"}</h6>
+                <br/>{"Go to SOLAR > Student Records & Registration > Academic Planning > Enrollment Shopping Cart and scroll down. Highlight and copy the entire table."}</h6>
             <input id = "SOLAR" className = "SOLAR" onChange = {this.handleChange} placeholder="Paste Here"/>
         </div>
     }
@@ -93,10 +93,10 @@ class QuickActions extends React.Component {
     }
 
     generateRandomColor() {
-        var letters = ["A", "B", "C", "D", "E", "F"]
+        var hexa = ["A", "B", "C", "D", "E", "F"]
         var color = '#';
         for (var i = 0; i < 6; i++ ) {
-            color += letters[Math.floor(Math.random() * 6)];
+            color += hexa[Math.floor(Math.random() * 6)];
         }
         return color;
     }
