@@ -1,10 +1,15 @@
 import React from 'react';
 
 class TimeSlot extends React.Component {
+
     render() {
         return (
             <div> 
-                <button onClick={this.handleClick} className = {"btn btn-info " + this.props.when}>
+                <button         
+                id = {this.props.addPadding ? "timeslot" : null}
+                onClick={this.handleClick} 
+                className = {"btn btn-info " + this.props.when}>
+                    
                     <h1 className = "text-center text-truncate">{this.props.name}</h1> 
                     <h6 className = "text-center text-truncate">{this.to24H(this.props.startTime)} to {this.to24H(this.props.endTime)}</h6> 
                     <p className = "text-center text-truncate">{this.props.info}</p>
@@ -41,6 +46,17 @@ class TimeSlot extends React.Component {
 
         }
     }
+
+    componentDidMount() {
+        if (this.props.addPadding)
+            document.body.style.paddingBottom = document.getElementById("timeslot").clientHeight + "px";
+    }
+
+    componentWillUnmount() {
+        if (this.props.addPadding)
+            document.body.style.paddingBottom = "0px";
+    }
+
 
 }
 

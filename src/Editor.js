@@ -72,7 +72,7 @@ class Editor extends React.Component {
                     <div>
                         <div className="form-check form-switch">
                             <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
-                            <label className="form-check-label" htmlFor="weeklyToggle">Weekly Schedule (on) or Daily Schedule (off)</label>
+                            <label className="form-check-label" htmlFor="weeklyToggle">{this.props.weekly ? "Displaying Weekly Schedule" : "Displaying Daily Schedule"}</label>
                         </div>
                     </div> : null}
                     <div className = "editors">{individualEditors}</div>

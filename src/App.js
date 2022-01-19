@@ -11,8 +11,8 @@ class App extends React.Component {
         super(props);
         var schedule = [];
         //Check to see if the link has parameters
+        //PWA
         if (window.matchMedia('(display-mode: standalone)').matches) {
-
             var link = localStorage.getItem('savedURL');
             if (link === "" || link === null) {
                 link = window.location.href;
@@ -20,24 +20,32 @@ class App extends React.Component {
                 link = link.substring(delim + 1);
             }
 
-        } else {
+        } else {//not PWA
             link = window.location.href;
             delim = link.indexOf('?');
             link = link.substring(delim + 1);
         }
         
-        if (delim !== -1) {
+        //no save found
+        if (delim === -1) {
+            this.state = { schedule: [], weekly: true, savedURL: "", deleted: [] };    
+        } else { //parameters found, try to create schedule
             try {
                 var savedSchedule = decompressFromBase64(link);
+                //weekly
+                //0
                 var weekly = savedSchedule.substring(0, 1) === "1";
-                const timeSlots = savedSchedule.split('>');
-                for (var i = 1; i < timeSlots.length; i++) {
-                    var currentTimeSlot = timeSlots[i].split('<');
-                    //name>startTime>endTime>example.com>0>1>2>3>4>5>6>color&
+                const classes = savedSchedule.split('>');
+                for (var i = 1; i < classes.length; i++) {
+                    var currentTimeSlot = classes[i].split('<');
+                    //name<startTime<endTime<example.com<0135<color>
+                    //name2<startTime2<endTime2<example2.com<246<color> ...
+                    //0      1          2         3          4            5
                 
-                    var daysList = [false, false, false, false, false, false, false];
-                    for (var j = 4; j < currentTimeSlot.length - 1; j++) {
-                        daysList[parseInt(currentTimeSlot[j])] = true;
+                    var daysList = currentTimeSlot[4].split("");
+                    var dayBools = [false, false, false, false, false, false, false];
+                    for (var j = 0; j < daysList.length; j++) {
+                        dayBools[parseInt(daysList[j])] = true;
                     }
                     
                     schedule.push([ 
@@ -45,30 +53,26 @@ class App extends React.Component {
                         currentTimeSlot[1],
                         currentTimeSlot[2],
                         currentTimeSlot[3],
-                        daysList[0],
-                        daysList[1],
-                        daysList[2],
-                        daysList[3],
-                        daysList[4],
-                        daysList[5],
-                        daysList[6],
-                        currentTimeSlot[currentTimeSlot.length - 1]
+                        dayBools[0],
+                        dayBools[1],
+                        dayBools[2],
+                        dayBools[3],
+                        dayBools[4],
+                        dayBools[5],
+                        dayBools[6],
+                        currentTimeSlot[5]
                     ]);
-
                 }
+                this.state = { schedule: schedule, weekly: weekly, savedURL: link, deleted: []};
             } catch (error) {
                 console.log("Schedule saved to URL is invalid or outdated")
                 this.state = { schedule: [], weekly: true, savedURL: "", deleted: [] };    
             }
-        } else {
-            weekly = true;
-            link  = "";
-        }
-            
-        this.state = { schedule: schedule, weekly: weekly, savedURL: link, deleted: []};
+        } 
     }
 
     render() {
+        //should we render weekends on weekly schedule?
         var days = [1, 2, 3, 4, 5];
         for (var i = 0; i < this.state.schedule.length; i++) {
             if (this.state.schedule[i][4] || this.state.schedule[i][10]) { //sat or sun
@@ -163,26 +167,43 @@ class App extends React.Component {
     }
 
     saveSchedule = (updateURL) => {
+    //weekly (bool)>
+    //name<startTime<endTime<example.com<0135<color>
+    //name2<startTime2<endTime2<example2.com<246<color> ...
+        if (this.state.schedule.length === 0) {
+            return;
+        }
+
+        //settings
         if (this.state.weekly)
             var strOutput = "1";
         else 
             strOutput = "0";
 
-        if (this.state.schedule.length !== 0)
-            strOutput += ">"
+        strOutput += ">"
             
+        //classes
         for (var i = 0; i < this.state.schedule.length; i++) {
-            strOutput += this.state.schedule[i][0] + "<" + this.state.schedule[i][1] + "<" + this.state.schedule[i][2] + "<" + this.state.schedule[i][3] + "<";
+            strOutput += this.state.schedule[i][0] + "<" + //name
+                         this.state.schedule[i][1] + "<" + //start time
+                         this.state.schedule[i][2] + "<" + //end time
+                         this.state.schedule[i][3] + "<";  //location
+
+            //days of week
             for (var day = 0; day < 7; day++) {
                 if (this.state.schedule[i][day + 4])
-                    strOutput += day + "<";
+                    strOutput += day;
             }
+            strOutput += "<";
 
+            //color
             strOutput += this.state.schedule[i][11];
+            
             if (i !== this.state.schedule.length - 1) {
                 strOutput += ">";
             }
         }
+        
     
         var compressed;
         if (strOutput !== "") {
@@ -190,7 +211,7 @@ class App extends React.Component {
         } else
             compressed = "";
             
-            
+        console.log(strOutput)
         if (updateURL)
             this.setState({savedURL: compressed}, () => {this.updateURL()})
         else

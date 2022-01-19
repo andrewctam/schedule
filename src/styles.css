@@ -243,6 +243,7 @@ input[type=time] {
 
 .weekly {
   width: 100%;
+  position: relative;
 }
 
 table {

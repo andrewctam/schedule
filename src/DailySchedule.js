@@ -6,6 +6,12 @@ import QuickActions from './QuickActions.js';
 class DailySchedule extends React.Component { 
     forceScheduleUpdate = () => {this.forceUpdate();}   
     render() {               
+        if (this.props.schedule.length === 0) {
+            return (<QuickActions 
+            generateExample = {this.props.generateExample}
+            updateEntireSchedule = {this.props.updateEntireSchedule}/>);   
+        }
+        
         const today = new Date();   
         var scheduleToday = [];  
 
@@ -16,7 +22,9 @@ class DailySchedule extends React.Component {
             }
         }
 
-        if (scheduleToday.length > 0) {
+        if (scheduleToday.length === 0) {
+            return (<h1>No Classes Today</h1>);
+        } else {
             scheduleToday = this.sortTimeSlots(scheduleToday);
             var result = this.determineTimes(scheduleToday);
             var classes = result[0]
@@ -31,20 +39,12 @@ class DailySchedule extends React.Component {
                 info = {x[3]}
                 when = {classes[classes.length - 1 - index]}
             />));
-
-        } else if (this.props.schedule.length === 0) {
-            return (<QuickActions 
-                    generateExample = {this.props.generateExample}
-                    updateEntireSchedule = {this.props.updateEntireSchedule}/>);        
-        } else {
-            return (<h1>No Classes Today</h1>);
+    
+            return (<div>
+                        <p>{this.formatMinutes(timeToNextClass)}</p>
+                        {scheduleToday}
+                    </div>); 
         }
-
-        
-        return (<div>
-                    <p>{this.formatMinutes(timeToNextClass)}</p>
-                    {scheduleToday}
-                </div>); 
     }
     
     formatMinutes = (num) => {

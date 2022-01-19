@@ -10,11 +10,11 @@ class QuickActions extends React.Component {
                 <hr/>
             <h6>If you are a Stony Brook student, you can copy and paste your schedule from your SOLAR. 
                 <br/>{"Go to SOLAR > Student Records & Registration > Academic Planning > Enrollment Shopping Cart and scroll down. Highlight and copy the entire table."}</h6>
-            <input id = "SOLAR" className = "SOLAR" onChange = {this.handleChange} placeholder="Paste Here"/>
+            <input id = "SOLAR" className = "SOLAR" onChange = {this.handleInput} placeholder="Paste Here"/>
         </div>
     }
 
-    handleChange = (e) => {
+    handleInput = (e) => {
         var inputStr = e.target.value;
         //index of next class in string. Current class index will be 0. 
         //inputStr = ABC 123- ... DEF 456- ... GHI 789-
