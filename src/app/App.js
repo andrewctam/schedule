@@ -1,10 +1,9 @@
 import React from 'react';
-import Editor from './Editor.js';
-import DailySchedule from './DailySchedule.js';
-import WeeklySchedule from './WeeklySchedule.js';
+import Settings from './settings/Settings.js';
+import DailySchedule from './schedule/DailySchedule.js';
+import WeeklySchedule from './schedule/WeeklySchedule.js';
 import { decompressFromBase64 } from "lz-string"
 import { compressToBase64 } from "lz-string"
-import "./styles.css"
 
 class App extends React.Component {
     constructor(props) {
@@ -83,7 +82,7 @@ class App extends React.Component {
 
         return (
         <div>
-            <Editor schedule={this.state.schedule} 
+            <Settings schedule={this.state.schedule} 
             updateClass={this.updateClass} 
             addEmptyClass = {this.addEmptyClass}
             removeClass = {this.removeClass}
@@ -132,7 +131,14 @@ class App extends React.Component {
     addEmptyClass = () => {
         var temp = this.state.schedule;
         temp.push(["","11:30","13:30","", false, false, false, false, false, false, false, this.generateRandomColor()]);
-        this.setState({schedule: temp}, () => {this.saveSchedule(false)});
+        this.setState({schedule: temp}, () => {
+            this.saveSchedule(false);
+            var editors = document.getElementById("editors");
+            if (editors !== null) {
+                editors.scrollTop = editors.scrollHeight;
+            }
+        });
+        
     }
     
     removeClass = (i) => {

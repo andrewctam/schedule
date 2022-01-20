@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ClassEditor extends React.Component {
+class Editor extends React.Component {
     render() {
         return (
             <div className="classEditor">
@@ -75,4 +75,4 @@ class DateCheckBox extends React.Component {
     }
 }
 
-export default ClassEditor;
+export default Editor;

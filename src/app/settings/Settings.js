@@ -1,12 +1,12 @@
 import React from 'react';
-import ClassEditor from './ClassEditor.js'
+import Editor from './Editor.js'
 
-class Editor extends React.Component {
+class Settings extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            editorActive: false,
+            editorsActive: false,
             showAddToHomeScreen: (localStorage.getItem("showAddToHomeScreen") !== "false") && 
                                  (navigator.userAgent.match(/iPhone/i) ||
                                   navigator.userAgent.match(/Android/i) ||
@@ -27,28 +27,9 @@ class Editor extends React.Component {
         else
             msg = <Message msg = {"schedule empty"}/>
             
-        //convert the schedule into time slot editors
-        var individualEditors = this.props.schedule.map((timeSlot, index) => 
-            <ClassEditor
-                key = {"tse" + index}
-                id = {index}
-                updateClass={this.props.updateClass}
-                removeClass={this.props.removeClass}
-                name = {timeSlot[0]}
-                startTime = {timeSlot[1]}
-                endTime = {timeSlot[2]}
-                info = {timeSlot[3]}
-                sun = {timeSlot[4]}
-                mon = {timeSlot[5]}
-                tue = {timeSlot[6]}
-                wed = {timeSlot[7]}
-                thu = {timeSlot[8]}
-                fri = {timeSlot[9]}
-                sat = {timeSlot[10]}
-                weeklyColor = {timeSlot[11]}
-            />);    
+        //convert the schedule into time slot editors  
             
-        return (<div className = "Editor">
+        return (<div className = "Settings">
              <div className = "row">
                 <div className = "col-sm-6">
                     <Clock/>
@@ -56,7 +37,7 @@ class Editor extends React.Component {
                 <div className = "col-sm-6 editSchedule">
                     <button type = "button" className = "btn btn-secondary" 
                         onClick = {this.toggleAndVerify}>
-                        {this.state.editorActive ? "Save and Close Editor" : "Edit Schedule"}  
+                        {this.state.editorsActive ? "Save and Close Editor" : "Edit Schedule"}  
                     </button>
                 </div>
              </div>
@@ -65,19 +46,29 @@ class Editor extends React.Component {
                 <Message msg = {"show add to home screen"} handleHide = {this.handleHide} />
             }
         
-            {this.state.editorActive ?
+            {this.state.editorsActive ?
                 <div>
                     {msg}
-                    {this.props.schedule.length > 0 ?
+                    {this.props.schedule.length > 0 && 
                     <div>
                         <div className="form-check form-switch">
                             <input className="form-check-input" onChange = {this.handleChecked} checked = {this.props.weekly} type="checkbox" id="weeklyToggle" />
                             <label className="form-check-label" htmlFor="weeklyToggle">{this.props.weekly ? "Displaying Weekly Schedule" : "Displaying Daily Schedule"}</label>
                         </div>
-                    </div> : null}
-                    <div className = "editors">{individualEditors}</div>
+                        <Editors 
+                        schedule = {this.props.schedule}   
+                        updateClass={this.props.updateClass}
+                        removeClass={this.props.removeClass}
+                        />
+                    </div> 
+                    }
+
                     <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
-                    {this.props.weekly && this.props.schedule.length > 0 ? <button className = "btn btn-primary" onClick={this.props.randomizeColors}>Randomize Colors</button> : null }
+
+                    {this.props.weekly && this.props.schedule.length > 0 &&
+                    <button className = "btn btn-primary" onClick={this.props.randomizeColors}>Randomize Colors</button> 
+                    }
+                    
                     <hr/>
                     
                     </div> 
@@ -113,7 +104,7 @@ class Editor extends React.Component {
     
     //show/hide the editor when pressed and verify all the start times are before the end times
     toggleAndVerify = () => {
-        if (this.state.editorActive) {
+        if (this.state.editorsActive) {
             console.log(this.props.schedule);
             if (this.props.link.length >= 2000) {
                 alert("Your schedule is too large. Try to reduce link sizes.");
@@ -147,9 +138,9 @@ class Editor extends React.Component {
                 }
             }  
             this.props.updateURL();
-            this.setState({editorActive: false});
+            this.setState({editorsActive: false});
         } else 
-            this.setState({editorActive: true});
+            this.setState({editorsActive: true});
 
     }
 
@@ -238,4 +229,31 @@ class Message extends React.Component {
     
 }
 
-export default Editor; 
+class Editors extends React.Component {
+    render() {
+        var editors = this.props.schedule.map((timeSlot, index) => 
+        <Editor
+            key = {"e" + index}
+            id = {index}
+            updateClass={this.props.updateClass}
+            removeClass={this.props.removeClass}
+            name = {timeSlot[0]}
+            startTime = {timeSlot[1]}
+            endTime = {timeSlot[2]}
+            info = {timeSlot[3]}
+            sun = {timeSlot[4]}
+            mon = {timeSlot[5]}
+            tue = {timeSlot[6]}
+            wed = {timeSlot[7]}
+            thu = {timeSlot[8]}
+            fri = {timeSlot[9]}
+            sat = {timeSlot[10]}
+            weeklyColor = {timeSlot[11]}
+        />);  
+
+        return <div id = "editors" className = "editors">{editors}</div>
+
+    }
+}
+
+export default Settings; 
