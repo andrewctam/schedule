@@ -38,8 +38,8 @@ class App extends React.Component {
                 const classes = savedSchedule.split('>');
                 for (var i = 1; i < classes.length; i++) {
                     var currentTimeSlot = classes[i].split('<');
-                    //name<startTime<endTime<example.com<0135<color>
-                    //name2<startTime2<endTime2<example2.com<246<color> ...
+                    //name<startTime<endTime<example.com<0135<color
+                    //name2<startTime2<endTime2<example2.com<246<color ...
                     //0      1          2         3          4            5
                 
                     var daysList = currentTimeSlot[4].split("");
@@ -60,7 +60,7 @@ class App extends React.Component {
                         dayBools[4],
                         dayBools[5],
                         dayBools[6],
-                        currentTimeSlot[5]
+                        "#" + currentTimeSlot[5]
                     ]);
                 }
                 this.state = { schedule: schedule, weekly: weekly, savedURL: link, deleted: []};
@@ -197,7 +197,7 @@ class App extends React.Component {
             strOutput += "<";
 
             //color
-            strOutput += this.state.schedule[i][11];
+            strOutput += this.state.schedule[i][11].substring(1);
             
             if (i !== this.state.schedule.length - 1) {
                 strOutput += ">";

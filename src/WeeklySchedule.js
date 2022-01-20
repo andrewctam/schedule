@@ -38,7 +38,7 @@ class WeeklySchedule extends React.Component {
             for (var j = 0; j < this.props.days.length; j++)
                 if (this.props.schedule[i][this.props.days[j] + 4]) {
                     blocks.push(
-                        <tbody key = {"block" + i + "on" + j} id={i} className = "block" onClick = {this.handleClick} style = {
+                        <div key = {"block" + i + "on" + j} id={i} className = "block" onClick = {this.handleClick} style = {
                             {
                                 height: lengthInMins + "px",
                                 top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px",
@@ -49,7 +49,7 @@ class WeeklySchedule extends React.Component {
                                 
                             <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][0]}</p>
                             <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][3]}</p>
-                        </tbody>);
+                        </div>);
                 }
             }
             
