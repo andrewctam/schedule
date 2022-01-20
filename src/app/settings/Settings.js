@@ -91,29 +91,20 @@ class Settings extends React.Component {
         this.props.toggleWeekly();
     }
 
-    stringToDate = (str) => {
-        //hh:mm to Date object
-        var hrs = str.substring(0, 2);
-        var mins = str.substring(3, 5);
-        var time = new Date();
-        time.setHours(parseInt(hrs));
-        time.setMinutes(parseInt(mins));
-        time.setSeconds(0);
-        return time;
-    }
+
     
     //show/hide the editor when pressed and verify all the start times are before the end times
     toggleAndVerify = () => {
         if (this.state.editorsActive) {
-            console.log(this.props.schedule);
             if (this.props.link.length >= 2000) {
                 alert("Your schedule is too large. Try to reduce link sizes.");
                 return null;
             }
 
             for (var i = 0; i < this.props.schedule.length; i++) {
-                if (this.stringToDate(this.props.schedule[i][2]) < this.stringToDate(this.props.schedule[i][1])) {
-                    if (this.props.schedule[i][0] === "") 
+ 
+                if (this.props.schedule[i].startTimeDate > this.props.schedule[i].endTimeDate)  {
+                    if (this.props.schedule[i].name === "") 
                         switch (i + 1) {
                             case 1:
                                 var identifier = "the " + (i + 1) + "st class";
@@ -129,7 +120,7 @@ class Settings extends React.Component {
                                 break;
                         }
                     else
-                        identifier = this.props.schedule[i][0];
+                        identifier = this.props.schedule[i].name;
 
                     if (!window.confirm("The end time of " + identifier + " is before the start time. Would you like to close the editor anyway?"))  { 
                         return null;
@@ -237,18 +228,18 @@ class Editors extends React.Component {
             id = {index}
             updateClass={this.props.updateClass}
             removeClass={this.props.removeClass}
-            name = {timeSlot[0]}
-            startTime = {timeSlot[1]}
-            endTime = {timeSlot[2]}
-            info = {timeSlot[3]}
-            sun = {timeSlot[4]}
-            mon = {timeSlot[5]}
-            tue = {timeSlot[6]}
-            wed = {timeSlot[7]}
-            thu = {timeSlot[8]}
-            fri = {timeSlot[9]}
-            sat = {timeSlot[10]}
-            weeklyColor = {timeSlot[11]}
+            name = {timeSlot.name}
+            startTime = {timeSlot.startTime}
+            endTime = {timeSlot.endTime}
+            info = {timeSlot.location}
+            sun = {timeSlot.days[0]}
+            mon = {timeSlot.days[1]}
+            tue = {timeSlot.days[2]}
+            wed = {timeSlot.days[3]}
+            thu = {timeSlot.days[4]}
+            fri = {timeSlot.days[5]}
+            sat = {timeSlot.days[6]}
+            weeklyColor = {timeSlot.color}
         />);  
 
         return <div id = "editors" className = "editors">{editors}</div>

@@ -47,20 +47,21 @@ class App extends React.Component {
                         dayBools[parseInt(daysList[j])] = true;
                     }
                     
-                    schedule.push([ 
+                    schedule.push(new ClassOnSchedule(
                         currentTimeSlot[0],
                         currentTimeSlot[1],
                         currentTimeSlot[2],
                         currentTimeSlot[3],
-                        dayBools[0],
+                        [dayBools[0],
                         dayBools[1],
                         dayBools[2],
                         dayBools[3],
                         dayBools[4],
                         dayBools[5],
-                        dayBools[6],
+                        dayBools[6]],
                         "#" + currentTimeSlot[5]
-                    ]);
+                        )
+                    );
                 }
                 this.state = { schedule: schedule, weekly: weekly, savedURL: link, deleted: []};
             } catch (error) {
@@ -91,7 +92,6 @@ class App extends React.Component {
             link = {"https://andrewtam.org/schedule/?" + this.state.savedURL}
             updateURL = {this.updateURL}
             randomizeColors={this.randomizeColors}
-
             /> 
             
             {this.state.weekly ? 
@@ -112,7 +112,7 @@ class App extends React.Component {
     randomizeColors = () => {
         var temp = this.state.schedule;
         for (var i = 0; i < temp.length; i++) {
-            temp[i][11] = this.generateRandomColor();
+            temp[i].color = this.generateRandomColor();
         }
         this.setState({schedule: temp},() => {this.saveSchedule(false)});;
     }
@@ -123,14 +123,53 @@ class App extends React.Component {
         });
     }
 
-    updateClass = (timeSlot, i, newValue) => {
+    updateClass = (timeSlot, toChange, newValue) => {
         var temp = this.state.schedule;
-        temp[timeSlot][i] = newValue;
+        console.log(toChange)
+        switch (toChange) {
+            case "name": 
+                temp[timeSlot].name = newValue;
+                break;
+            case "startTime":
+                temp[timeSlot].startTime = newValue;
+                break;
+            case "endTime":
+                temp[timeSlot].endTime = newValue;
+                break;
+            case "location":
+                temp[timeSlot].location = newValue;
+                break;
+            case "color":
+                temp[timeSlot].color = newValue;
+                break;
+            case "su":
+                temp[timeSlot].days[0] = newValue;
+                break;
+            case "mo":
+                temp[timeSlot].days[1] = newValue;
+                break;
+            case "tu": 
+                temp[timeSlot].days[2] = newValue;
+                break;
+            case "we": 
+                temp[timeSlot].days[3] = newValue;
+                break;
+            case "th":
+                temp[timeSlot].days[4] = newValue;
+                break;
+            case "fr":
+                temp[timeSlot].days[5] = newValue;
+                break;
+            case "sa":
+                temp[timeSlot].days[6] = newValue;
+                break;
+            default: break;
+        }
         this.setState({schedule: temp}, () => {this.saveSchedule(false)});
     }
     addEmptyClass = () => {
         var temp = this.state.schedule;
-        temp.push(["","11:30","13:30","", false, false, false, false, false, false, false, this.generateRandomColor()]);
+        temp.push(new ClassOnSchedule("","11:30","13:30","", [false, false, false, false, false, false, false], this.generateRandomColor()));
         this.setState({schedule: temp}, () => {
             this.saveSchedule(false);
             var editors = document.getElementById("editors");
@@ -154,11 +193,11 @@ class App extends React.Component {
 
     generateExample = () => {
         var temp = [
-            ["BIO 102", "10:15", "11:45", "Main Lecture Hall 102", false, true, false, true, false, true, false, this.generateRandomColor()],
-            ["CSE 103", "13:15", "14:40", "Engineering 112", false, false, true, false, true, false, false, this.generateRandomColor()],
-            ["MAT 144", "12:00", "13:00", "https://zoom.us/...", false, false, true, false, true, false, false, this.generateRandomColor()],
-            ["MUS 101", "08:30", "09:40", "Center of Arts 500",  false, true, false, true, false, false, false, this.generateRandomColor()],
-            ["POL 181", "16:30", "17:20", "https://zoom.us/...",  false, true, false, true, false, false, false, this.generateRandomColor()],
+            new ClassOnSchedule("BIO 102", "10:15", "11:45", "Main Lecture Hall 102", [false, true, false, true, false, true, false], this.generateRandomColor()),
+            new ClassOnSchedule("CSE 103", "13:15", "14:40", "Engineering 112", [false, false, true, false, true, false, false], this.generateRandomColor()),
+            new ClassOnSchedule("MAT 144", "12:00", "13:00", "https://zoom.us/...", [false, false, true, false, true, false, false], this.generateRandomColor()),
+            new ClassOnSchedule("MUS 101", "08:30", "09:40", "Center of Arts 500",  [false, true, false, true, false, false, false], this.generateRandomColor()),
+            new ClassOnSchedule("POL 181", "16:30", "17:20", "https://zoom.us/...",  [false, true, false, true, false, false, false], this.generateRandomColor()),
             ];
 
         this.setState({schedule: temp}, () => {this.saveSchedule(false)});
@@ -190,20 +229,20 @@ class App extends React.Component {
             
         //classes
         for (var i = 0; i < this.state.schedule.length; i++) {
-            strOutput += this.state.schedule[i][0] + "<" + //name
-                         this.state.schedule[i][1] + "<" + //start time
-                         this.state.schedule[i][2] + "<" + //end time
-                         this.state.schedule[i][3] + "<";  //location
+            strOutput += this.state.schedule[i].name + "<" + //name
+                         this.state.schedule[i].startTime + "<" + //start time
+                         this.state.schedule[i].endTime + "<" + //end time
+                         this.state.schedule[i].location + "<";  //location
 
             //days of week
             for (var day = 0; day < 7; day++) {
-                if (this.state.schedule[i][day + 4])
+                if (this.state.schedule[i].days[day])
                     strOutput += day;
             }
             strOutput += "<";
 
             //color
-            strOutput += this.state.schedule[i][11].substring(1);
+            strOutput += this.state.schedule[i].color.substring(1);
             
             if (i !== this.state.schedule.length - 1) {
                 strOutput += ">";
@@ -217,7 +256,6 @@ class App extends React.Component {
         } else
             compressed = "";
             
-        console.log(strOutput)
         if (updateURL)
             this.setState({savedURL: compressed}, () => {this.updateURL()})
         else
@@ -232,5 +270,43 @@ class App extends React.Component {
     }
 }
 
+class ClassOnSchedule {
+    constructor(name, startTime, endTime, location, days, color) {
+        this.name = name;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location
+        this.days = days;
+        this.color = color;
+        
+        if (startTime !== "") {
+            var hrs = startTime.substring(0, 2);
+            var mins = startTime.substring(3, 5);
+            var time = new Date();
+            time.setHours(parseInt(hrs));
+            time.setMinutes(parseInt(mins));
+            time.setSeconds(0);
+            this.startTimeDate = time;
+        } else {
+            this.startTimeDate = new Date();
+        }
 
+        if (endTime !== "") {
+            hrs = endTime.substring(0, 2);
+            mins = endTime.substring(3, 5);
+            time = new Date();
+            time.setHours(parseInt(hrs));
+            time.setMinutes(parseInt(mins));
+            time.setSeconds(0);
+            this.endTimeDate = time;
+        } else {
+            this.endTimeDate = new Date();
+        }
+
+
+    }
+}
+
+
+export {ClassOnSchedule};
 export default App;

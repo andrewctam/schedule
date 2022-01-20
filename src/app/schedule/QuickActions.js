@@ -1,4 +1,5 @@
 import React from 'react';
+import {ClassOnSchedule} from "../App.js"
 
 class QuickActions extends React.Component {
     render() {
@@ -67,19 +68,21 @@ class QuickActions extends React.Component {
                 daysOfWeek = stringArray[i].match(/\) (Su|Mo|Tu|We|Th|Fr|Sa){1,7} /)
             }
 
-            schedule.push([stringArray[i].substring(0, 7),
+            schedule.push(new ClassOnSchedule(
+                            stringArray[i].substring(0, 7),
                             startTime, 
                             endTime, 
                             location,
-                            daysOfWeek[0].includes("Su"),
+                            [daysOfWeek[0].includes("Su"),
                             daysOfWeek[0].includes("Mo"),
                             daysOfWeek[0].includes("Tu"),
                             daysOfWeek[0].includes("We"),
                             daysOfWeek[0].includes("Th"),
                             daysOfWeek[0].includes("Fr"),
-                            daysOfWeek[0].includes("Sa"),
-                            this.generateRandomColor()]); 
+                            daysOfWeek[0].includes("Sa")],
+                            this.generateRandomColor())); 
         }
+        console.log(schedule)
         return schedule;
     }
 

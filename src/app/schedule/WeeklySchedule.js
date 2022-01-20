@@ -19,8 +19,9 @@ class WeeklySchedule extends React.Component {
         var startHr = 24;
         var endHr = 0;
         for (var i = 0; i < this.props.schedule.length; i++) {
-            var start = this.stringToDate(this.props.schedule[i][1]);
-            var end = this.stringToDate(this.props.schedule[i][2]);
+            var start = this.props.schedule[i].startTimeDate;
+            var end = this.props.schedule[i].endTimeDate;
+            
             if (start.getHours() < startHr) {
                 startHr = start.getHours();
             }
@@ -31,24 +32,24 @@ class WeeklySchedule extends React.Component {
         //create blocks for each class
         var blocks = [];
         for (i = 0; i < this.props.schedule.length; i++) {      
-            start = this.stringToDate(this.props.schedule[i][1]);
-            end = this.stringToDate(this.props.schedule[i][2]);
+            start = this.props.schedule[i].startTimeDate;
+            end = this.props.schedule[i].endTimeDate;
             var lengthInMins = (end.getHours() - start.getHours()) * 60 + end.getMinutes() - start.getMinutes();
             
             for (var j = 0; j < this.props.days.length; j++)
-                if (this.props.schedule[i][this.props.days[j] + 4]) {
+                if (this.props.schedule[i].days[this.props.days[j]]) {
                     blocks.push(
                         <div key = {"block" + i + "on" + j} id={i} className = "block" onClick = {this.handleClick} style = {
                             {
                                 height: lengthInMins + "px",
                                 top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px",
                                 left: (100 / (this.props.days.length + 1)) * (j + 1) + "%",
-                                backgroundColor: this.props.schedule[i][11],
-                                color: this.darkOrWhiteText(this.props.schedule[i][11]),
+                                backgroundColor: this.props.schedule[i].color,
+                                color: this.darkOrWhiteText(this.props.schedule[i].color),
                             }}>
                                 
-                            <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][0]}</p>
-                            <p className = "text-center text-truncate text-wrap">{this.props.schedule[i][3]}</p>
+                            <p className = "text-center text-truncate text-wrap">{this.props.schedule[i].name}</p>
+                            <p className = "text-center text-truncate text-wrap">{this.props.schedule[i].location}</p>
                         </div>);
                 }
             }
@@ -87,24 +88,13 @@ class WeeklySchedule extends React.Component {
         );
     }
 
-    stringToDate = (str) => {
-        if (str!= null) {
-            var hrs = str.substring(0, 2);
-            var mins = str.substring(3, 5);
-            var time = new Date();
-            time.setHours(parseInt(hrs));
-            time.setMinutes(parseInt(mins));
-            time.setSeconds(0);
-            return time;
-        }
-    }
 
     handleClick = (e) => {
         var timeSlot = <TimeSlot
         addPadding = {true}
         when = {"classInFuture"}
-        name = {this.props.schedule[e.target.id][0]}       info = {this.props.schedule[e.target.id][3]}
-        startTime = {this.props.schedule[e.target.id][1]}  endTime = {this.props.schedule[e.target.id][2]}
+        name = {this.props.schedule[e.target.id].name}       info = {this.props.schedule[e.target.id].location}
+        startTime = {this.props.schedule[e.target.id].startTime}  endTime = {this.props.schedule[e.target.id].endTime}
         />;
 
         this.setState({timeSlot:
@@ -164,9 +154,9 @@ class CurrentTime extends React.Component {
         var leastTimeToNextClass = -1;
  
         for (var i = 0; i < this.props.schedule.length; i++) {      
-            var start = this.stringToDate(this.props.schedule[i][1]);
-            var end = this.stringToDate(this.props.schedule[i][2]);
-            if (this.props.schedule[i][now.getDay() + 4]) {
+            var start = this.props.schedule[i].startTimeDate;
+            var end = this.props.schedule[i].endTimeDate;
+            if (this.props.schedule[i].days[now.getDay()]) {
                 if (now < start) {
                     var timeToNextClass = ((start - now) / 60000);
                     if (timeToNextClass < leastTimeToNextClass || leastTimeToNextClass === -1)
@@ -208,19 +198,6 @@ class CurrentTime extends React.Component {
             return time;
         }
     }
-
-    stringToDate = (str) => {
-        if (str != null) {
-            var hrs = str.substring(0, 2);
-            var mins = str.substring(3, 5);
-            var time = new Date();
-            time.setHours(parseInt(hrs));
-            time.setMinutes(parseInt(mins));
-            time.setSeconds(0);
-            return time;
-        }
-    }
-    
     formatMinutes = (num) => {
         var mins = Math.ceil(num);
         var hrs = Math.floor(mins / 60);

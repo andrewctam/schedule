@@ -17,7 +17,7 @@ class DailySchedule extends React.Component {
 
         //3 = sun, 4 = mon, 5 = tue, 6 = wed, 7 = thu, 8 = fri, 9 = sun
         for (var j = 0; j < this.props.schedule.length; j++) {
-            if (this.props.schedule[j][today.getDay() + 4]) {
+            if (this.props.schedule[j].days[today.getDay()]) {
                 scheduleToday.push(this.props.schedule[j]);
             }
         }
@@ -33,10 +33,10 @@ class DailySchedule extends React.Component {
             scheduleToday = (scheduleToday.map((x, index) => 
                 <TimeSlot
                 key = {"ts" + index}
-                name = {x[0]}       
-                startTime = {x[1]}  
-                endTime = {x[2]}
-                info = {x[3]}
+                name = {x.name}       
+                startTime = {x.startTime}  
+                endTime = {x.endTime}
+                info = {x.location}
                 when = {classes[classes.length - 1 - index]}
             />));
     
@@ -69,9 +69,9 @@ class DailySchedule extends React.Component {
         for (var i = 0; i < timeSlots.length; i++) {    
             minJ = i;
             for (var j = i + 1; j < timeSlots.length; j++) {
-                if (timeSlots[minJ][1] > timeSlots[j][1]) {
+                if (timeSlots[minJ].startTime > timeSlots[j].endTime) {
                     minJ = j;
-                } else if (timeSlots[minJ][2] > timeSlots[j][2]) {
+                } else if (timeSlots[minJ].endTime > timeSlots[j].startTime) {
                     minJ = j;
                 }
             } 
@@ -91,10 +91,10 @@ class DailySchedule extends React.Component {
             var earlyTime = new Date();
             earlyTime.setMinutes(earlyTime.getMinutes() + 10);
 
-            var startTime = this.stringToDate(timeSlots[i][1]);
-            var endTime = this.stringToDate(timeSlots[i][2]);
+            var startTime = timeSlots[i].startTimeDate;
+            var endTime = timeSlots[i].endTimeDate;
             
-            if (currentTime <= endTime || timeSlots[i][2] === "") { //10:00 < 12:00
+            if (currentTime <= endTime || timeSlots[i].endTIme === "") { //10:00 < 12:00
                 if (startTime <= currentTime) 
                     classes.push("classInProgress");
                 else {
@@ -109,16 +109,6 @@ class DailySchedule extends React.Component {
                 classes.push("classOver");
         }
         return [classes, timeToNextClass];
-    }
-
-    stringToDate = (str) => {
-        var hrs = str.substring(0, 2);
-        var mins = str.substring(3, 5);
-        var time = new Date();
-        time.setHours(parseInt(hrs));
-        time.setMinutes(parseInt(mins));
-        time.setSeconds(0);
-        return time;
     }
 
     componentDidMount() {
