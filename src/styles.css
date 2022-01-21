@@ -155,9 +155,12 @@ h1 {
 }
 
 .classEditor {
-  margin-top: 5vh;
+  margin-bottom: 5vh;
   border: 1px solid black;
   width: 100%;
+}
+.classEditor:last-of-type {
+  margin-bottom: none;
 }
 
 .row {
@@ -545,11 +548,14 @@ tr>p {
   }
 
   .classEditor {
-    margin-top: 5vh;
+    margin-bottom: 5vh;
     border: 1px solid gray;
     width: 100%;
   }
 
+  .classEditor:last-of-type {
+    margin-bottom: 0;
+  }
   .row {
     width: 100%;
     margin-left: 0px;
