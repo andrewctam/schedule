@@ -231,7 +231,7 @@ class Editors extends React.Component {
             name = {timeSlot.name}
             startTime = {timeSlot.startTime}
             endTime = {timeSlot.endTime}
-            info = {timeSlot.location}
+            location = {timeSlot.location}
             sun = {timeSlot.days[0]}
             mon = {timeSlot.days[1]}
             tue = {timeSlot.days[2]}

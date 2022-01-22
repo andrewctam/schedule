@@ -36,7 +36,7 @@ class DailySchedule extends React.Component {
                 name = {x.name}       
                 startTime = {x.startTime}  
                 endTime = {x.endTime}
-                info = {x.location}
+                location = {x.location}
                 when = {classes[classes.length - 1 - index]}
             />));
     

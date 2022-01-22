@@ -93,8 +93,10 @@ class WeeklySchedule extends React.Component {
         var timeSlot = <TimeSlot
         addPadding = {true}
         when = {"classInFuture"}
-        name = {this.props.schedule[e.target.id].name}       info = {this.props.schedule[e.target.id].location}
-        startTime = {this.props.schedule[e.target.id].startTime}  endTime = {this.props.schedule[e.target.id].endTime}
+        name = {this.props.schedule[e.target.id].name}       
+        location = {this.props.schedule[e.target.id].location}
+        startTime = {this.props.schedule[e.target.id].startTime}  
+        endTime = {this.props.schedule[e.target.id].endTime}
         />;
 
         this.setState({timeSlot:

@@ -10,7 +10,7 @@ class Editor extends React.Component {
                     </div>
 
                     <div className="col-sm-6 link">
-                        <input id = {this.props.id + ":location"} type="text" onChange = {this.handleChange} value = {this.props.info} placeholder="Class Location or Link with http(s)://"/>
+                        <input id = {this.props.id + ":location"} type="text" onChange = {this.handleChange} value = {this.props.location} placeholder="Class Location or Link with http(s)://"/>
                     </div>
                 </div>
 
@@ -22,12 +22,12 @@ class Editor extends React.Component {
                     </div>
 
                     <div className="col-sm-6 checks">
-                        <DateCheckBox htmlID ={this.props.id +  ":su"} dateBool = {this.props.sun} date = "Sun" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox htmlID ={this.props.id +  ":mo"} dateBool = {this.props.mon} date = "Mon" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox htmlID ={this.props.id +  ":tu"} dateBool = {this.props.tue} date = "Tue" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox htmlID ={this.props.id +  ":we"} dateBool = {this.props.wed} date = "Wed" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox htmlID ={this.props.id +  ":th"} dateBool = {this.props.thu} date = "Thu" handleChecked = {this.handleChecked}/>
-                        <DateCheckBox htmlID ={this.props.id +  "fr"} dateBool = {this.props.fri} date = "Fri" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id + ":su"} dateBool = {this.props.sun} date = "Sun" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id + ":mo"} dateBool = {this.props.mon} date = "Mon" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id + ":tu"} dateBool = {this.props.tue} date = "Tue" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id + ":we"} dateBool = {this.props.wed} date = "Wed" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id + ":th"} dateBool = {this.props.thu} date = "Thu" handleChecked = {this.handleChecked}/>
+                        <DateCheckBox htmlID ={this.props.id + ":fr"} dateBool = {this.props.fri} date = "Fri" handleChecked = {this.handleChecked}/>
                         <DateCheckBox htmlID ={this.props.id + ":sa"} dateBool = {this.props.sat} date = "Sat" handleChecked = {this.handleChecked}/>
                     </div>
                 </div>
