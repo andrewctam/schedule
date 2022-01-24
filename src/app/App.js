@@ -132,9 +132,31 @@ class App extends React.Component {
                 break;
             case "startTime":
                 temp[timeSlot].startTime = newValue;
+                if (newValue !== "") {
+                    var hrs = newValue.substring(0, 2);
+                    var mins = newValue.substring(3, 5);
+                    var time = new Date();
+                    time.setHours(parseInt(hrs));
+                    time.setMinutes(parseInt(mins));
+                    time.setSeconds(0);
+                    temp[timeSlot].startTimeDate = time;
+                } else {
+                    temp[timeSlot].startTimeDate = new Date();
+                }
                 break;
             case "endTime":
                 temp[timeSlot].endTime = newValue;
+                if (newValue !== "") {
+                    var hrs = newValue.substring(0, 2);
+                    var mins = newValue.substring(3, 5);
+                    var time = new Date();
+                    time.setHours(parseInt(hrs));
+                    time.setMinutes(parseInt(mins));
+                    time.setSeconds(0);
+                    temp[timeSlot].endTimeDate = time;
+                } else {
+                    temp[timeSlot].endTimeDate = new Date();
+                }                
                 break;
             case "location":
                 temp[timeSlot].location = newValue;

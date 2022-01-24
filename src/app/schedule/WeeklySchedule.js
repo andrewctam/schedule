@@ -35,7 +35,7 @@ class WeeklySchedule extends React.Component {
             start = this.props.schedule[i].startTimeDate;
             end = this.props.schedule[i].endTimeDate;
             var lengthInMins = (end.getHours() - start.getHours()) * 60 + end.getMinutes() - start.getMinutes();
-            
+            console.log(this.props.schedule)
             for (var j = 0; j < this.props.days.length; j++)
                 if (this.props.schedule[i].days[this.props.days[j]]) {
                     blocks.push(
