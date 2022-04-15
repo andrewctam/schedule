@@ -1,52 +1,36 @@
 import React from 'react';
 import TimeSlot from './TimeSlot.js';
 import QuickActions from './QuickActions.js';
-
+import Hour from './weekly/Hour.js';
+import CurrentTime from './weekly/CurrentTime.js';
+import TimeBlock from './weekly/TimeBlock.js';
 class WeeklySchedule extends React.Component {
     constructor(props) {
         super(props);
 
         var now = new Date();
-        var leastTimeToNextClass = -1;
-        //-1 = after all classes
-        //-2 = inside a class
- 
         for (var i = 0; i < this.props.schedule.length; i++) {      
-            var start = this.props.schedule[i].startTimeDate;
-            var end = this.props.schedule[i].endTimeDate;
-            if (this.props.schedule[i].days[now.getDay()]) {
-                if (now < start) {
-                    var timeToNextClass = ((start - now) / 60000);
-                    if (timeToNextClass < leastTimeToNextClass || leastTimeToNextClass === -1)
-                        leastTimeToNextClass = timeToNextClass;
+            if (this.props.schedule[i].days[now.getDay()] &&
+                this.props.schedule[i].startTimeDate < now &&
+                now < this.props.schedule[i].endTimeDate) {
 
-                } else if (now < end) { //after the start but before the end. i.e. in the middle of a class
-                    leastTimeToNextClass = -2;
-                    break;
-                }
+                this.state = {timeSlot: 
+                    <div className = "fixed-bottom">
+                        <TimeSlot
+                        addPadding = {true}
+                        when = {"classInFuture"}
+                        name = {this.props.schedule[i].name}       
+                        location = {this.props.schedule[i].location}
+                        startTime = {this.props.schedule[i].startTime}  
+                        endTime = {this.props.schedule[i].endTime}
+                        /> 
+                    </div>};
+
+                return;
             }
-
         }
-
-        if (leastTimeToNextClass === -2) {
-            this.state = {timeSlot: 
-                <div className = "fixed-bottom">
-                    <TimeSlot
-                    addPadding = {true}
-                    when = {"classInFuture"}
-                    name = {this.props.schedule[i].name}       
-                    location = {this.props.schedule[i].location}
-                    startTime = {this.props.schedule[i].startTime}  
-                    endTime = {this.props.schedule[i].endTime}
-                    /> 
-                </div>
-            };
-        } else 
-            this.state = {timeSlot: null};
-            
-        console.log(this.state.timeSlot)
-
-
+        
+        this.state = {timeSlot: null};
     }
 
     render() {
@@ -55,53 +39,56 @@ class WeeklySchedule extends React.Component {
                 generateExample = {this.props.generateExample}
                 updateEntireSchedule = {this.props.updateEntireSchedule}/>);
 
+
+
         document.documentElement.style.setProperty("--numDays", (100 / (this.props.days.length + 1)) + "%");
         //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
         //determine what is the earliest class and what is the latest class
-        var startHr = 24;
-        var endHr = 0;
+        var scheduleStart = 24;
+        var scheduleEnd = 0;
         for (var i = 0; i < this.props.schedule.length; i++) {
-            var start = this.props.schedule[i].startTimeDate;
-            var end = this.props.schedule[i].endTimeDate;
+            var classStart = this.props.schedule[i].startTimeDate;
+            var classEnd = this.props.schedule[i].endTimeDate;
             
-            if (start.getHours() < startHr) {
-                startHr = start.getHours();
+            if (classStart.getHours() < scheduleStart) {
+                scheduleStart = classStart.getHours();
             }
-            if (end.getHours() > endHr) {
-                endHr = end.getHours();
+            if (classEnd.getHours() > scheduleEnd) {
+                scheduleEnd = classEnd.getHours();
             }
         }
+
         //create blocks for each class
         var blocks = [];
         for (i = 0; i < this.props.schedule.length; i++) {      
-            start = this.props.schedule[i].startTimeDate;
-            end = this.props.schedule[i].endTimeDate;
-            var lengthInMins = (end.getHours() - start.getHours()) * 60 + end.getMinutes() - start.getMinutes();
+            classStart = this.props.schedule[i].startTimeDate;
+            classEnd = this.props.schedule[i].endTimeDate;
+            var lengthInMins = (classEnd.getHours() - classStart.getHours()) * 60 + classEnd.getMinutes() - classStart.getMinutes();
             console.log(this.props.schedule)
-            for (var j = 0; j < this.props.days.length; j++)
+
+            for (var j = 0; j < this.props.days.length; j++) {
                 if (this.props.schedule[i].days[this.props.days[j]]) {
                     blocks.push(
-                        <div key = {"block" + i + "on" + j} id={i} className = "block" onClick = {this.handleClick} style = {
-                            {
-                                height: lengthInMins + "px",
-                                top: start.getHours() * 60 + start.getMinutes() - (startHr - 1) * 60 + "px",
-                                left: (100 / (this.props.days.length + 1)) * (j + 1) + "%",
-                                backgroundColor: this.props.schedule[i].color,
-                                color: this.darkOrWhiteText(this.props.schedule[i].color),
-                            }}>
-                                
-                            <p className = "text-center text-truncate text-wrap">{this.props.schedule[i].name}</p>
-                            <p className = "text-center text-truncate text-wrap">{this.props.schedule[i].location}</p>
-                        </div>);
+                    <TimeBlock
+                        height = {lengthInMins}
+                        classStart = {classStart}
+                        scheduleStart = {scheduleStart}
+                        days = {this.props.days}
+                        schedule = {this.props.schedule}
+                        showTimeSlot = {this.showTimeSlot}
+                        i = {i}
+                        j = {j}
+
+                        key = {i + ":" + j}
+                    />);
                 }
             }
+        }
             
-        //create the hours 
         var hours = [];
-        for (i = startHr; i <= endHr; i++) {
+        for (i = scheduleStart; i <= scheduleEnd; i++) {
             hours.push(<Hour key = {"hr" + i} time = {i} numOfDays = {this.props.days.length} />);
         }
-
 
         var daysHeader = [<th key = "time" scope="col">  <p>Time</p>  </th>];
         var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -125,164 +112,31 @@ class WeeklySchedule extends React.Component {
                 
                 {this.state.timeSlot}
                 {blocks}
-                <CurrentTime key = "currentTime" days = {this.props.days} schedule = {this.props.schedule} startHr = {startHr} endHr = {endHr} />
+                <CurrentTime key = "currentTime" days = {this.props.days} schedule = {this.props.schedule} startHr = {scheduleStart} endHr = {scheduleEnd} />
             </div>
         );
     }
 
 
-    handleClick = (e) => {
+    showTimeSlot = (ts) => {
         this.setState({timeSlot:
             <div className = "fixed-bottom">
                 <TimeSlot
                 addPadding = {true}
                 when = {"classInFuture"}
-                name = {this.props.schedule[e.target.id].name}       
-                location = {this.props.schedule[e.target.id].location}
-                startTime = {this.props.schedule[e.target.id].startTime}  
-                endTime = {this.props.schedule[e.target.id].endTime}
+                name = {this.props.schedule[ts].name}       
+                location = {this.props.schedule[ts].location}
+                startTime = {this.props.schedule[ts].startTime}  
+                endTime = {this.props.schedule[ts].endTime}
                 />
             </div>
         })
 
 
     }
-    darkOrWhiteText(bkColor) { //#123456
-        var brightness = Math.round((
-                    (Number("0x" + bkColor.substring(1, 3)) * 299) +
-                    (Number("0x" + bkColor.substring(3, 5)) * 587) +
-                    (Number("0x" + bkColor.substring(5)) * 114)) / 1000);
-        return (brightness > 125) ? 'black' : 'white';
-
-    }
+    
     
 }
 
-class Hour extends React.Component {
-    render() {
-        var hrs = this.props.time;
 
-        if (isNaN(hrs)) {
-            var meridian = "";
-        } else {
-            meridian = hrs < 12 ? "AM" : "PM";
-            if (hrs > 12) {
-                hrs %= 12;
-            } else if (hrs === 0) {
-                hrs = 12;
-            }
-        }
-        
-        var daysOfWeek = []
-        for ( var i = 0; i < this.props.numOfDays; i++) {
-            daysOfWeek.push(<td key = {this.props.time + "," + i} />) 
-        }
-
-        return (
-                <tr>
-                    <th scope = "row" style = {{verticalAlign: "top"}}>
-                        <p>{hrs + " " + meridian}</p>
-                    </th>
-                    {daysOfWeek}
-                </tr>
-
-        )
-    }
-}
-
-class CurrentTime extends React.Component {
-    render() {
-        var now = new Date();
-        var leastTimeToNextClass = -1;
- 
-        for (var i = 0; i < this.props.schedule.length; i++) {      
-            var start = this.props.schedule[i].startTimeDate;
-            var end = this.props.schedule[i].endTimeDate;
-            if (this.props.schedule[i].days[now.getDay()]) {
-                if (now < start) {
-                    var timeToNextClass = ((start - now) / 60000);
-                    if (timeToNextClass < leastTimeToNextClass || leastTimeToNextClass === -1)
-                    leastTimeToNextClass = timeToNextClass;
-
-                } else if (now < end) { //in middle of a class
-                    leastTimeToNextClass = -1;
-                    break;
-                }
-            }
-
-        }
-
-        for (i = 0; i < this.props.days.length; i++) {
-            if (new Date().getDay() === this.props.days[i]) {
-                var date = i + 1;
-                break;
-            }
-        }
-
-        if (this.props.days.indexOf(new Date().getDay()) !== -1 && now > this.intToDate(this.props.startHr) && now < this.intToDate(this.props.endHr + 1))
-            return <div id = "currentTime" className = "line" onClick = {this.handleClick} style = {
-                    {
-                        top: now.getHours() * 60 + now.getMinutes() - (this.props.startHr - 1) * 60 - 28 + "px",
-                        left: (date * (100 / (this.props.days.length + 1))) + "%",
-                    }}>
-                    <p>{(leastTimeToNextClass !== -1 ? this.formatMinutes(leastTimeToNextClass) : "")}&#8204;</p>
-                </div>
-        else 
-            return null;
-    }
-    
-    intToDate = (num) => {
-        if (!isNaN(num)) {
-            var time = new Date();
-            time.setHours(num);
-            time.setMinutes(0);
-            time.setSeconds(0);
-            return time;
-        }
-    }
-    formatMinutes = (num) => {
-        var mins = Math.ceil(num);
-        var hrs = Math.floor(mins / 60);
-        mins = mins % 60;
-
-        var minuteWord = mins === 1 ? " min" : " mins";
-        var hourWord = hrs === 1 ? " hour" : " hours";
-
-        if (hrs === 0) {
-            return mins + minuteWord; 
-        } else
-            return hrs + hourWord + " " + mins + minuteWord;
-            
-    }
-    
-    handleClick = () => {
-        document.getElementById("currentTime").style.display = "none";
-        this.hide = setInterval(() => this.show(), 5000);
-    }
-
-
-    show = () => {
-        document.getElementById("currentTime").style.display = "table";
-        clearInterval(this.hide);
-
-    }
-
-    componentDidMount() {
-        var timeToNextMinute = 61000 - (new Date().getSeconds() * 1000);
-        this.waitUntilMinute = setInterval(() => this.repeatEveryMin(), timeToNextMinute);
-    }
-
-    repeatEveryMin() {
-        clearInterval(this.waitUntilMinute);
-        this.forceUpdate();
-        this.interval = setInterval(() => this.forceUpdate(), 60000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
-        clearInterval(this.waitUntilMinute);
-        clearInterval(this.hide);
-
-    }
-}
 export default WeeklySchedule;
