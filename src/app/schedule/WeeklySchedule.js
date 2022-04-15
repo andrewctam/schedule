@@ -5,8 +5,50 @@ import QuickActions from './QuickActions.js';
 class WeeklySchedule extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {timeSlot: null};
+
+        var now = new Date();
+        var leastTimeToNextClass = -1;
+        //-1 = after all classes
+        //-2 = inside a class
+ 
+        for (var i = 0; i < this.props.schedule.length; i++) {      
+            var start = this.props.schedule[i].startTimeDate;
+            var end = this.props.schedule[i].endTimeDate;
+            if (this.props.schedule[i].days[now.getDay()]) {
+                if (now < start) {
+                    var timeToNextClass = ((start - now) / 60000);
+                    if (timeToNextClass < leastTimeToNextClass || leastTimeToNextClass === -1)
+                        leastTimeToNextClass = timeToNextClass;
+
+                } else if (now < end) { //after the start but before the end. i.e. in the middle of a class
+                    leastTimeToNextClass = -2;
+                    break;
+                }
+            }
+
+        }
+
+        if (leastTimeToNextClass === -2) {
+            this.state = {timeSlot: 
+                <div className = "fixed-bottom">
+                    <TimeSlot
+                    addPadding = {true}
+                    when = {"classInFuture"}
+                    name = {this.props.schedule[i].name}       
+                    location = {this.props.schedule[i].location}
+                    startTime = {this.props.schedule[i].startTime}  
+                    endTime = {this.props.schedule[i].endTime}
+                    /> 
+                </div>
+            };
+        } else 
+            this.state = {timeSlot: null};
+            
+        console.log(this.state.timeSlot)
+
+
     }
+
     render() {
         if (this.props.schedule.length === 0)
             return (<QuickActions 
@@ -90,18 +132,16 @@ class WeeklySchedule extends React.Component {
 
 
     handleClick = (e) => {
-        var timeSlot = <TimeSlot
-        addPadding = {true}
-        when = {"classInFuture"}
-        name = {this.props.schedule[e.target.id].name}       
-        location = {this.props.schedule[e.target.id].location}
-        startTime = {this.props.schedule[e.target.id].startTime}  
-        endTime = {this.props.schedule[e.target.id].endTime}
-        />;
-
         this.setState({timeSlot:
             <div className = "fixed-bottom">
-                {timeSlot}
+                <TimeSlot
+                addPadding = {true}
+                when = {"classInFuture"}
+                name = {this.props.schedule[e.target.id].name}       
+                location = {this.props.schedule[e.target.id].location}
+                startTime = {this.props.schedule[e.target.id].startTime}  
+                endTime = {this.props.schedule[e.target.id].endTime}
+                />
             </div>
         })
 
