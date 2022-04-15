@@ -89,6 +89,7 @@ class App extends React.Component {
         <div>
             <Settings schedule={this.state.schedule} 
             updateClass={this.updateClass} 
+            updateEntireSchedule = {this.updateEntireSchedule}
             addEmptyClass = {this.addEmptyClass}
             removeClass = {this.removeClass}
             toggleWeekly = {this.toggleWeekly}
@@ -250,6 +251,7 @@ class App extends React.Component {
     //name<startTime<endTime<example.com<0135<color>
     //name2<startTime2<endTime2<example2.com<246<color> ...
         if (this.state.schedule.length === 0) {
+            this.setState({savedURL: ""}, () => {this.updateURL()})
             return;
         }
 
@@ -302,6 +304,8 @@ class App extends React.Component {
         window.history.pushState({}, '', url);   
         localStorage.setItem('savedURL', this.state.savedURL);
     }
+
+
 }
 
 class ClassOnSchedule {

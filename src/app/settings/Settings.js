@@ -65,8 +65,18 @@ class Settings extends React.Component {
 
                     <button className = "btn btn-primary" onClick={this.handleAdd}>Add Class</button>
 
-                    {this.props.weekly && this.props.schedule.length > 0 &&
-                    <button className = "btn btn-primary" onClick={this.props.randomizeColors}>Randomize Colors</button> 
+
+                    {this.props.schedule.length > 0 ? 
+                    (
+                        <div>
+                            {this.props.weekly ?
+                                <button className = "btn btn-secondary" onClick={this.props.randomizeColors}>Randomize Colors</button>  : null
+                            }
+                            
+
+                            <button className = "btn btn-secondary" onClick = {this.clearSchedule}> Clear Schedule</button>
+                        </div>
+                    ) : null
                     }
                     
                     <hr/>
@@ -91,6 +101,11 @@ class Settings extends React.Component {
         this.props.toggleWeekly();
     }
 
+    clearSchedule = () => {
+        if(window.confirm("Are you sure you want to clear your schedule?")) {
+            this.props.updateEntireSchedule( [] );
+        }
+    }
 
     
     //show/hide the editor when pressed and verify all the start times are before the end times
