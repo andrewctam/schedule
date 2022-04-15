@@ -1,9 +1,9 @@
 import React from 'react';
 import TimeSlot from './TimeSlot.js';
-import QuickActions from './QuickActions.js';
+import TimeBlock from './weekly/TimeBlock.js';
 import Hour from './weekly/Hour.js';
 import CurrentTime from './weekly/CurrentTime.js';
-import TimeBlock from './weekly/TimeBlock.js';
+
 class WeeklySchedule extends React.Component {
     constructor(props) {
         super(props);
@@ -34,14 +34,6 @@ class WeeklySchedule extends React.Component {
     }
 
     render() {
-        if (this.props.schedule.length === 0)
-            return (<QuickActions 
-                generateExample = {this.props.generateExample}
-                updateEntireSchedule = {this.props.updateEntireSchedule}/>);
-
-
-
-        document.documentElement.style.setProperty("--numDays", (100 / (this.props.days.length + 1)) + "%");
         //name-startTime-endTime-example.com-0-1-2-3-4-5-6&
         //determine what is the earliest class and what is the latest class
         var scheduleStart = 24;

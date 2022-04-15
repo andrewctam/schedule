@@ -1,17 +1,10 @@
 
 import React from 'react';
 import TimeSlot from './TimeSlot.js'
-import QuickActions from './QuickActions.js';
 
 class DailySchedule extends React.Component { 
     forceScheduleUpdate = () => {this.forceUpdate();}   
     render() {               
-        if (this.props.schedule.length === 0) {
-            return (<QuickActions 
-            generateExample = {this.props.generateExample}
-            updateEntireSchedule = {this.props.updateEntireSchedule}/>);   
-        }
-        
         const today = new Date();   
         var scheduleToday = [];  
 

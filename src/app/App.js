@@ -2,6 +2,8 @@ import React from 'react';
 import Settings from './settings/Settings.js';
 import DailySchedule from './schedule/DailySchedule.js';
 import WeeklySchedule from './schedule/WeeklySchedule.js';
+import QuickActions from './schedule/QuickActions.js';
+
 import { decompressFromBase64 } from "lz-string"
 import { compressToBase64 } from "lz-string"
 
@@ -80,6 +82,8 @@ class App extends React.Component {
                 break;
             }
         }
+        
+        document.documentElement.style.setProperty("--numDays", (100 / (days.length + 1)) + "%");
 
         return (
         <div>
@@ -94,16 +98,24 @@ class App extends React.Component {
             randomizeColors={this.randomizeColors}
             /> 
             
-            {this.state.weekly ? 
-                <WeeklySchedule days = {days} 
+
+            {this.state.schedule.length === 0 ? 
+                <QuickActions 
+                generateExample = {this.generateExample}
+                updateEntireSchedule = {this.updateEntireSchedule}/> 
+            : this.state.weekly ? 
+                <WeeklySchedule 
+                days = {days} 
                 schedule = {this.state.schedule} 
                 updateEntireSchedule = {this.updateEntireSchedule}
-                generateExample = {this.generateExample}/> 
-                : 
-                <DailySchedule schedule = {this.state.schedule} 
+                /> 
+            : 
+                <DailySchedule 
+                schedule = {this.state.schedule} 
                 updateEntireSchedule = {this.updateEntireSchedule}
-                generateExample = {this.generateExample}/>
+                />
             }
+
         </div>
         //schedule is {[name, startTime, endTime, link, sun (bool), ..., sat, color], 
         //             [name, startTime, endTime, link, sun, ..., sat, color] ...}
