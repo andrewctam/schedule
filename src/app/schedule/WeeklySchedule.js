@@ -9,7 +9,7 @@ class WeeklySchedule extends React.Component {
         super(props);
 
         var now = new Date();
-        now.setMinutes(now.getMinutes() + 10);
+        now.setMinutes(now.getMinutes() + 5);
         
         for (var i = 0; i < this.props.schedule.length; i++) {      
             if (this.props.schedule[i].days[now.getDay()] &&
