@@ -5,12 +5,16 @@ class QuickActions extends React.Component {
     render() {
         return <div className = "quickActions">
             <h6>Click Edit Schedule above to add classes or click below to generate an example</h6>
-            <button className = "btn btn-primary example" 
+            <button className = "btn btn-primary example randomScheduleButton" 
                 onClick = {() => this.props.generateExample()}>
                 Generate Example Schedule</button>
                 <hr/>
-            <h6>If you are a Stony Brook student, you can copy and paste your schedule from your SOLAR. 
-                <br/>{"Go to SOLAR > Student Records & Registration > Academic Planning > Enrollment Shopping Cart and scroll down. Highlight and copy the entire table."}</h6>
+
+            <h6>
+                {"If you are a SBU student, you can copy and paste your schedule from your SOLAR."}
+                <br/>
+                {"Go to SOLAR > Student Records & Registration > Academic Planning > Enrollment Shopping Cart and scroll down. Highlight and copy the entire table."}
+            </h6>
             <input id = "SOLAR" className = "SOLAR" onChange = {this.handleInput} placeholder="Paste Here"/>
         </div>
     }

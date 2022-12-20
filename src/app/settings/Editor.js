@@ -40,6 +40,7 @@ class Editor extends React.Component {
                         <button className = "btn btn-danger btn-sm" onClick = {this.handleDelete}>Delete From Schedule</button>
                     </div>
                 </div>
+
             </div>
         );
     }

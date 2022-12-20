@@ -77,7 +77,7 @@ class App extends React.Component {
         //should we render weekends on weekly schedule?
         var days = [1, 2, 3, 4, 5];
         for (var i = 0; i < this.state.schedule.length; i++) {
-            if (this.state.schedule[i][4] || this.state.schedule[i][10]) { //sat or sun
+            if (this.state.schedule[i].days[0] || this.state.schedule[i].days[6]) { //sat or sun
                 days = [0, 1, 2, 3, 4, 5, 6]
                 break;
             }

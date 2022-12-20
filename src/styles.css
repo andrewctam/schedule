@@ -24,6 +24,15 @@ h1 {
   font-size: xx-large;
 }
 
+.editorContainer {
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  background-color: rgb(50, 50, 50);
+  z-index: 10;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
 .editors {
   overflow-y: scroll;
   max-height: 50vh;
@@ -35,6 +44,7 @@ h1 {
   margin-right: auto;
   margin-top: 1vh;
   margin-bottom: 1vh;
+  position: relative;
 }
 
 @media (max-width: 576px) {
@@ -44,8 +54,6 @@ h1 {
 }
 
 .editorInfo {
-  border: 1px black solid;
-  border-top: none;
   padding-top: 1vh;
   padding-bottom: 1vh;
   padding-left: 5%;
@@ -387,7 +395,7 @@ tr>p {
 
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: rgb(28, 31, 42);
+    background-color: rgb(30, 30, 30);
     color: rgb(255, 255, 255);
   }
 
@@ -434,8 +442,6 @@ tr>p {
   }
 
   .editorInfo {
-    border: 1px solid gray;
-    border-top: none;
     padding-top: 1vh;
     padding-bottom: 1vh;
     padding-left: 5%;
@@ -455,10 +461,18 @@ tr>p {
     border: none;
   }
 
+  .randomScheduleButton {
+    border-radius: 20px;
+    padding: 10px;
+    background-color: #547954 !important; 
+  }
+
+
+  
+
   .btn {
     width: 100%;
     border: none;
-    border-radius: 0px;
   }
 
   .btn:focus {
@@ -779,16 +793,19 @@ tr>p {
   .SOLAR {
     border: 1px solid black;
     border-radius: 1px;
+    padding: 10px;
+    border-radius: 10px;
     width: 50%;
     margin-left: 25%;
     margin-right: 25%;
     color: white;
-    background-color: rgba(142, 190, 212, 0.5);
+    margin-top: 20px;
+    background-color: rgba(115, 149, 165, 0.5);
   }
 
   .SOLAR::placeholder,
   input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgb(255, 255, 255);
   }
 
 

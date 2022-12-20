@@ -34,6 +34,7 @@ class Settings extends React.Component {
                 <div className = "col-sm-6">
                     <Clock/>
                 </div>
+                
                 <div className = "col-sm-6 editSchedule">
                     <button type = "button" className = "btn btn-secondary" 
                         onClick = {this.toggleAndVerify}>
@@ -47,7 +48,7 @@ class Settings extends React.Component {
             }
         
             {this.state.editorsActive ?
-                <div>
+                <div className  = "editorContainer">
                     {msg}
                     {this.props.schedule.length > 0 && 
                     <div>
@@ -79,11 +80,10 @@ class Settings extends React.Component {
                     ) : null
                     }
                     
-                    <hr/>
-                    
                     </div> 
-                : <hr/>
-            } 
+                : null}
+            <hr/>
+            
             </div>);
     }
   
@@ -217,8 +217,7 @@ class Message extends React.Component {
                                 </li>
 
                                 :<div>
-                                <li>{"To discard your changes, refresh the page."}</li>
-                                <li>{"To save your schedule, click Save and Close Editor and bookmark/favorite this page"}</li>
+                                <li>{"To discard your changes, simply refresh the page. To save your schedule, click Save and Close Editor and bookmark/favorite this page"}</li>
                                 <li>{"You can also save your schedule by copying this URL:"}</li>
                                 </div>}
         
